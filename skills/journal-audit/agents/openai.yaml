@@ -1,0 +1,4 @@
+interface:
+  display_name: Journal Audit
+  short_description: Audit a manuscript without modifying it
+  default_prompt: Audit this manuscript against the pinned target-journal profile and preserve all unknowns.

@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "benchmark_version": "1.0.0",
+  "journalport_version": "0.1.0rc1",
+  "benchmark_date": "2026-09-29",
+  "profile_versions": {"publisher": "1.1.0", "journal": "1.1.0", "article_type": "1.1.0"},
+  "fixture_set": "tests/fixtures/guidelines/*.json",
+  "scope": "Curated 1.1.0 Article profiles; strict recall denominator is VERIFIED article-layer rules",
+  "journals": {
+    "nature-communications": {"candidate_rules": 7, "verified_matches": 5, "verified_ground_truth": 5, "recall": 1.0},
+    "nature-computational-science": {"candidate_rules": 7, "verified_matches": 7, "verified_ground_truth": 8, "recall": 0.875},
+    "nature-machine-intelligence": {"candidate_rules": 7, "verified_matches": 7, "verified_ground_truth": 8, "recall": 0.875}
+  },
+  "aggregate": {
+    "supported_candidate_precision": 1.0,
+    "verified_rule_recall": 0.9047619048,
+    "f1": 0.95,
+    "value_accuracy": 1.0,
+    "operator_accuracy": 1.0,
+    "scope_target_accuracy": 1.0,
+    "applicability_accuracy": 1.0,
+    "evidence_attribution_accuracy": 1.0,
+    "hallucinated_requirement_rate": 0.0,
+    "rule_stability_three_runs": 1.0
+  }
+}

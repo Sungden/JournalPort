@@ -1,0 +1,4 @@
+interface:
+  display_name: Journal Profile
+  short_description: Build a reviewable draft profile from official evidence
+  default_prompt: Create a draft JournalProfile and report every item requiring human review.

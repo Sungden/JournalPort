@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "skills": [
+    {
+      "skill_id": "journal-profile", "version": "1.0.0",
+      "description": "Discover official guidance and create an immutable draft profile review bundle.",
+      "entry_point": "journal-profile/SKILL.md", "requires_journalport": ">=0.1.0rc1,<0.2",
+      "inputs": ["journal", "article_type", "official_source_snapshot"],
+      "outputs": ["candidate_profile", "profile_diff", "review_queue", "skill_run"],
+      "capabilities": ["discover", "refresh-draft", "offline-replay"], "safety_level": "DRAFT_ONLY"
+    },
+    {
+      "skill_id": "journal-audit", "version": "1.0.0",
+      "description": "Run a read-only compliance audit against a pinned JournalProfile.",
+      "entry_point": "journal-audit/SKILL.md", "requires_journalport": ">=0.1.0rc1,<0.2",
+      "inputs": ["manuscript", "journal", "article_type", "profile_version"],
+      "outputs": ["compliance_report", "evaluation_trace", "skill_run"],
+      "capabilities": ["parse", "audit", "explain"], "safety_level": "READ_ONLY"
+    },
+    {
+      "skill_id": "journal-transfer", "version": "1.0.0",
+      "description": "Plan and apply safe transformations, then independently verify the candidate.",
+      "entry_point": "journal-transfer/SKILL.md", "requires_journalport": ">=0.1.0rc1,<0.2",
+      "inputs": ["manuscript", "journal", "article_type", "profile_version"],
+      "outputs": ["transformation_plan", "candidate", "verification_report", "skill_run"],
+      "capabilities": ["audit", "plan", "apply-safe", "verify"], "safety_level": "APPROVAL_GATED"
+    },
+    {
+      "skill_id": "submission-package", "version": "1.0.0",
+      "description": "Plan, build, and independently verify a submission package from supplied artifacts.",
+      "entry_point": "submission-package/SKILL.md", "requires_journalport": ">=0.1.0rc1,<0.2",
+      "inputs": ["verified_candidate", "verification_report", "compliance_report", "author_artifacts"],
+      "outputs": ["package_plan", "submission_package", "package_readiness_report", "skill_run"],
+      "capabilities": ["package-plan", "package-build", "package-verify"], "safety_level": "ARTIFACT_BUILD"
+    }
+  ]
+}

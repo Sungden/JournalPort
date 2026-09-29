@@ -1,0 +1,4 @@
+interface:
+  display_name: Journal Transfer
+  short_description: Apply safe changes and independently verify a candidate
+  default_prompt: Plan a journal transfer, stop for approval or semantic work, and verify safe changes independently.
