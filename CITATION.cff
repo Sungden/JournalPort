@@ -1,10 +1,11 @@
 cff-version: 1.2.0
 title: JournalPort
-message: "Citation metadata is provisional until the first public release."
+message: "If you use JournalPort, please cite this software release."
 type: software
 authors:
   - name: Sungden
 version: 0.1.0rc1
+date-released: 2026-09-29
 license: Apache-2.0
 repository-code: "https://github.com/Sungden/JournalPort"
 abstract: "Provenance-aware, verifiable, content-preserving journal transfer infrastructure."

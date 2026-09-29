@@ -29,9 +29,12 @@ Local validation on the hosting-validation source:
 - `git diff --check`: passed
 - prior M9 wheel/sdist builds, clean installs, content inspection, and installed full workflow: passed
 
-Hosted GitHub Actions run
+Earlier hosting-validation run
 [36573324369](https://github.com/Sungden/JournalPort/actions/runs/36573324369) passed for Python
-3.11, 3.12, and 3.13, including tests, Ruff, mypy, compileall, and benchmark reproduction.
+3.11, 3.12, and 3.13, including tests, Ruff, mypy, compileall, and benchmark reproduction. Final
+HEAD validation run
+[36574145167](https://github.com/Sungden/JournalPort/actions/runs/36574145167) passed the same matrix
+at commit `d563cfc13f7384e8b913ed7813ef66e50ae72a8b` and is the authoritative M9.5 hosted-CI result.
 
 Two earlier hosted failures were resolved rather than waived: test-package imports were made
 checkout-portable; profile hashes now use declared canonical JSON hashing independent of line
