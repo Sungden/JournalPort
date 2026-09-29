@@ -1,5 +1,7 @@
 # JournalPort
 
+Repository: [github.com/Sungden/JournalPort](https://github.com/Sungden/JournalPort)
+
 **A provenance-aware, verifiable, content-preserving infrastructure for journal transfer and
 submission compliance.**
 

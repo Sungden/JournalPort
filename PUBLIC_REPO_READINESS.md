@@ -33,13 +33,14 @@ with `journalport benchmark guideline-extraction` and retains its narrow-scope d
 
 ## Git provenance and hosting readiness
 
-Repository-local commit identity is configured as user-supplied `Sungden <dengy066@gmail.com>`.
+Repository-local commit identity is configured as user-supplied `Sungden` identity; its email is
+intentionally omitted from public documentation.
 Reviewed logical initial commits and their history are recorded in `M9_AUDIT.md`. No tag, remote,
 push, repository creation, PyPI upload, or Zenodo action was performed.
 
-Hosting is **BLOCKED BY USER METADATA/ACTION**: choose repository owner/name, approve the canonical
-URL, approve final citation author representation and whether any email/ORCID is public, provide a
-private security contact, and obtain passing hosted CI.
+Canonical hosting is <https://github.com/Sungden/JournalPort>. Remaining user-controlled gates are
+approval of final citation author representation and whether any email/ORCID is public, provision
+of a private security contact, and passing hosted CI.
 
 ## Release recommendation
 

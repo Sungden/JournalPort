@@ -83,7 +83,7 @@ def test_profile_registry_hashes_and_statuses() -> None:
         assert item["status"] == "PARTIAL"
 
 
-def test_citation_is_provisional_without_invented_hosting_metadata() -> None:
+def test_citation_uses_confirmed_hosting_without_invented_author_metadata() -> None:
     text = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
     for required in (
         "cff-version: 1.2.0",
@@ -93,8 +93,10 @@ def test_citation_is_provisional_without_invented_hosting_metadata() -> None:
         "license: Apache-2.0",
     ):
         assert required in text
-    assert "repository-code:" not in text
+    assert 'repository-code: "https://github.com/Sungden/JournalPort"' in text
     assert "doi:" not in text.lower()
+    assert "email:" not in text.lower()
+    assert "orcid" not in text.lower()
 
 
 def test_documentation_and_release_structure() -> None:

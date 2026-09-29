@@ -76,8 +76,8 @@ and fails on inconsistency. Public claims remain limited to the curated three-jo
 
 ## Git provenance
 
-Repository-local identity is the user-provided `Sungden <dengy066@gmail.com>`; global configuration
-was not changed. The repository began with no commits. M9 creates logical reviewed commits for the
+Repository-local identity is the user-provided `Sungden` identity (email intentionally omitted from
+public documentation); global configuration was not changed. The repository began with no commits. M9 creates logical reviewed commits for the
 core/profile foundation, guideline/Skill workflows, and rc stabilization. Final commit hashes and
 clean-tree status are appended after commit creation. No history rewrite, tag, remote, or push occurs.
 

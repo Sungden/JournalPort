@@ -2,7 +2,7 @@
 
 JournalPort is pre-release and processes potentially confidential manuscripts. Do not include
 manuscript content, author data, provider secrets, or credentials in a public report. A private
-security contact remains a public-release metadata blocker.
+security contact remains a public-release metadata blocker: `SECURITY_CONTACT_PENDING`.
 
 Security-sensitive surfaces include hostile DOCX ZIP/XML resource exhaustion; LaTeX traversal and
 unsafe commands; malicious journal-page prompt injection; provider credentials; profile and plan

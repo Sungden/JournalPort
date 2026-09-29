@@ -18,6 +18,12 @@ classifiers = [
 ]
 dependencies = ["jsonschema[format]>=4.23,<5"]
 
+[project.urls]
+Homepage = "https://github.com/Sungden/JournalPort"
+Repository = "https://github.com/Sungden/JournalPort"
+Issues = "https://github.com/Sungden/JournalPort/issues"
+Documentation = "https://github.com/Sungden/JournalPort/tree/master/docs"
+
 [project.scripts]
 journalport = "journalport.cli:main"
 

@@ -6,5 +6,6 @@ authors:
   - name: Sungden
 version: 0.1.0rc1
 license: Apache-2.0
+repository-code: "https://github.com/Sungden/JournalPort"
 abstract: "Provenance-aware, verifiable, content-preserving journal transfer infrastructure."
 

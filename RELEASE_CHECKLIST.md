@@ -14,3 +14,7 @@
 - [ ] Release tag approved and ready
 - [x] Release notes prepared
 - [ ] Zenodo metadata approved; archive only after GitHub release
+
+Recommended repository settings after hosting: require the test workflow on the default branch,
+disallow force pushes, and require review for profile changes as the contributor base grows. These
+settings are recommendations only and were not changed automatically.
