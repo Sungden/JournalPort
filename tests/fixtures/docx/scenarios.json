@@ -1,0 +1,6 @@
+{
+  "license": "Apache-2.0",
+  "generator": "tests.docx_fixture_factory:build_docx",
+  "supported_bundle": ["basic_article", "tables", "figures", "citations", "footnotes", "OMML", "fields", "cross_references"],
+  "blocking_bundle": ["tracked_changes.inserted_text", "tracked_changes.deleted_text", "tracked_changes.replacement", "tracked_changes.multiple_changes", "tracked_changes.number", "tracked_changes.citation", "unsupported_object"]
+}

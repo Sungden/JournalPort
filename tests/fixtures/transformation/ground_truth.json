@@ -1,0 +1,14 @@
+{
+  "safe_filename_fix":{"classification":"SAFE_AUTOMATIC","execution":"APPLIED","approval":"NOT_REQUIRED"},
+  "safe_style_fix":{"classification":"AUTHOR_APPROVAL_REQUIRED","execution":"MANUAL_ACTION_REQUIRED","support":"UNSUPPORTED"},
+  "section_relocation":{"classification":"AUTHOR_APPROVAL_REQUIRED","execution":"MANUAL_ACTION_REQUIRED","support":"UNSUPPORTED"},
+  "title_page_extraction":{"classification":"AUTHOR_APPROVAL_REQUIRED","execution":"MANUAL_ACTION_REQUIRED","support":"UNSUPPORTED"},
+  "reference_style_case":{"classification":"AUTHOR_APPROVAL_REQUIRED","execution":"MANUAL_ACTION_REQUIRED","support":"UNSUPPORTED"},
+  "approval_required_abstract":{"classification":"AUTHOR_APPROVAL_REQUIRED","execution":"BLOCKED_APPROVAL"},
+  "approval_required_missing_statement":{"classification":"AUTHOR_APPROVAL_REQUIRED","execution":"BLOCKED_APPROVAL"},
+  "blocked_unsupported_docx":{"execution":"TRANSFORMATION_BLOCKED_BY_UNSUPPORTED_CONTENT"},
+  "source_modified_after_plan":{"execution":"BLOCKED_PRECONDITION"},
+  "profile_modified_after_plan":{"execution":"BLOCKED_PRECONDITION"},
+  "tampered_approval":{"execution":"BLOCKED_APPROVAL"},
+  "unsupported_transformation":{"transformation_status":"UNSUPPORTED","execution":"MANUAL_ACTION_REQUIRED"}
+}

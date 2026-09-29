@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/canonical_manuscript.schema.json",
+  "title": "JournalPort CanonicalManuscript",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "manuscript_id", "source", "metadata", "abstract", "main_body", "methods", "statements", "figures", "tables", "equations", "citations", "references", "supplementary_materials", "footnotes", "endnotes", "unsupported_content"],
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9]*_[A-Za-z0-9][A-Za-z0-9_.-]*$"},
+    "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "sourceLocator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["format", "status", "source_file", "part", "index", "line_start", "line_end", "relationship_id", "environment", "command"],
+      "properties": {
+        "format": {"enum": ["DOCX", "LATEX"]}, "status": {"enum": ["EXACT", "PARTIAL", "UNKNOWN"]},
+        "source_file": {"type": "string"}, "part": {"type": ["string", "null"]},
+        "index": {"type": ["integer", "null"], "minimum": 0},
+        "line_start": {"type": ["integer", "null"], "minimum": 1}, "line_end": {"type": ["integer", "null"], "minimum": 1},
+        "relationship_id": {"type": ["string", "null"]}, "environment": {"type": ["string", "null"]}, "command": {"type": ["string", "null"]}
+      }
+    },
+    "richText": {"type": "object", "additionalProperties": false, "required": ["object_id", "text", "source_locator"], "properties": {"object_id": {"$ref": "#/$defs/id"}, "text": {"type": "string"}, "source_locator": {"$ref": "#/$defs/sourceLocator"}}},
+    "section": {"type": "object", "additionalProperties": false, "required": ["object_id", "title", "level", "source_locator", "paragraphs", "subsections"], "properties": {"object_id": {"$ref": "#/$defs/id"}, "title": {"type": "string"}, "level": {"type": "integer", "minimum": 1}, "source_locator": {"$ref": "#/$defs/sourceLocator"}, "paragraphs": {"type": "array", "items": {"$ref": "#/$defs/richText"}}, "subsections": {"type": "array", "items": {"$ref": "#/$defs/section"}}}},
+    "author": {"type": "object", "additionalProperties": false, "required": ["object_id", "name", "orcid", "affiliation_ids", "corresponding", "email"], "properties": {"object_id": {"$ref": "#/$defs/id"}, "name": {"type": "string", "minLength": 1}, "orcid": {"type": ["string", "null"], "pattern": "^https://orcid.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9X]{4}$"}, "affiliation_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}}, "corresponding": {"type": "boolean"}, "email": {"type": ["string", "null"]}}},
+    "asset": {"type": "object", "additionalProperties": false, "required": ["object_id", "label", "legend", "file_refs", "source_locator", "content_hash", "content_text"], "properties": {"object_id": {"$ref": "#/$defs/id"}, "label": {"type": "string"}, "legend": {"type": "string"}, "file_refs": {"type": "array", "items": {"type": "string"}}, "source_locator": {"$ref": "#/$defs/sourceLocator"}, "content_hash": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}, "content_text": {"type": ["string", "null"]}}},
+    "note": {"type": "object", "additionalProperties": false, "required": ["object_id", "text", "source_locator"], "properties": {"object_id": {"$ref": "#/$defs/id"}, "text": {"type": "string"}, "source_locator": {"$ref": "#/$defs/sourceLocator"}}},
+    "equation": {"type": "object", "additionalProperties": false, "required": ["object_id", "representation", "value", "source_locator", "label"], "properties": {"object_id": {"$ref": "#/$defs/id"}, "representation": {"enum": ["LATEX", "MATHML", "OMML", "IMAGE", "UNKNOWN"]}, "value": {"type": "string", "minLength": 1}, "source_locator": {"$ref": "#/$defs/sourceLocator"}, "label": {"type": ["string", "null"]}}},
+    "citation": {"type": "object", "additionalProperties": false, "required": ["object_id", "reference_ids", "raw_text", "source_locator", "citation_keys"], "properties": {"object_id": {"$ref": "#/$defs/id"}, "reference_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}}, "raw_text": {"type": "string", "minLength": 1}, "source_locator": {"$ref": "#/$defs/sourceLocator"}, "citation_keys": {"type": "array", "items": {"type": "string"}}}},
+    "reference": {"type": "object", "additionalProperties": false, "required": ["object_id", "raw_text", "source_locator", "structured", "doi"], "properties": {"object_id": {"$ref": "#/$defs/id"}, "raw_text": {"type": "string"}, "source_locator": {"$ref": "#/$defs/sourceLocator"}, "structured": {"type": ["object", "null"]}, "doi": {"type": ["string", "null"]}}},
+    "unsupported": {"type": "object", "additionalProperties": false, "required": ["object_id", "object_type", "source_locator", "reason", "severity", "preservation_possible", "raw_fragment_preserved", "source_fragment_hash", "raw_fragment"], "properties": {"object_id": {"$ref": "#/$defs/id"}, "object_type": {"type": "string", "minLength": 1}, "source_locator": {"$ref": "#/$defs/sourceLocator"}, "reason": {"type": "string", "minLength": 1}, "severity": {"enum": ["WARNING", "BLOCKING"]}, "preservation_possible": {"type": "boolean"}, "raw_fragment_preserved": {"type": "boolean"}, "source_fragment_hash": {"$ref": "#/$defs/sha256"}, "raw_fragment": {"type": ["string", "null"]}}}
+  },
+  "properties": {
+    "schema_version": {"const": "1.1.0"},
+    "manuscript_id": {"$ref": "#/$defs/id"},
+    "source": {"type": "object", "additionalProperties": false, "required": ["format", "filename", "sha256"], "properties": {"format": {"enum": ["DOCX", "LATEX"]}, "filename": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}},
+    "metadata": {"type": "object", "additionalProperties": false, "required": ["title", "short_title", "article_type", "authors", "author_order", "affiliations", "keywords"], "properties": {"title": {"type": "string"}, "short_title": {"type": ["string", "null"]}, "article_type": {"type": "string"}, "authors": {"type": "array", "items": {"$ref": "#/$defs/author"}}, "author_order": {"type": "array", "items": {"$ref": "#/$defs/id"}}, "affiliations": {"type": "array", "items": {"$ref": "#/$defs/note"}}, "keywords": {"type": "array", "items": {"type": "string"}}}},
+    "abstract": {"type": "array", "items": {"$ref": "#/$defs/section"}}, "main_body": {"type": "array", "items": {"$ref": "#/$defs/section"}}, "methods": {"type": ["array", "null"], "items": {"$ref": "#/$defs/section"}},
+    "statements": {"type": "object", "additionalProperties": false, "required": ["acknowledgements", "funding", "author_contributions", "competing_interests", "ethics", "consent", "data_availability", "code_availability"], "properties": {"acknowledgements": {"type": ["string", "null"]}, "funding": {"type": ["string", "null"]}, "author_contributions": {"type": ["string", "null"]}, "competing_interests": {"type": ["string", "null"]}, "ethics": {"type": ["string", "null"]}, "consent": {"type": ["string", "null"]}, "data_availability": {"type": ["string", "null"]}, "code_availability": {"type": ["string", "null"]}}},
+    "figures": {"type": "array", "items": {"$ref": "#/$defs/asset"}}, "tables": {"type": "array", "items": {"$ref": "#/$defs/asset"}}, "equations": {"type": "array", "items": {"$ref": "#/$defs/equation"}}, "citations": {"type": "array", "items": {"$ref": "#/$defs/citation"}}, "references": {"type": "array", "items": {"$ref": "#/$defs/reference"}}, "supplementary_materials": {"type": "array", "items": {"$ref": "#/$defs/asset"}}, "footnotes": {"type": "array", "items": {"$ref": "#/$defs/note"}}, "endnotes": {"type": "array", "items": {"$ref": "#/$defs/note"}}, "unsupported_content": {"type": "array", "items": {"$ref": "#/$defs/unsupported"}}
+  }
+}

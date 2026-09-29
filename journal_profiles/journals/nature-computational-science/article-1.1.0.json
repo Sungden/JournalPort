@@ -1,0 +1,434 @@
+{
+  "article_type": "Article",
+  "display_name": "Nature Computational Science — Article",
+  "evidence": [
+    {
+      "evidence_hash": "sha256:6843bd89939179b5622c65e7272deb0ebd7ae7f6ef71a33a59d52f46ce7a5dce",
+      "evidence_id": "ev:natcomputsci.limits",
+      "evidence_text": "Article limits: main text 3,500 words; abstract 150 words; display items 6; references guideline 50.",
+      "locator": "Article",
+      "source_id": "src:natcomputsci.content"
+    },
+    {
+      "evidence_hash": "sha256:877dfe89e5e75b917fa7ef70fb28db4a737a0f68afc7a8a3d6605c421fa097a9",
+      "evidence_id": "ev:natcomputsci.structure",
+      "evidence_text": "Article structure uses an unheaded Introduction, Results, Discussion and Online Methods; Discussion has no subheadings.",
+      "locator": "Article",
+      "source_id": "src:natcomputsci.content-structure"
+    },
+    {
+      "evidence_hash": "sha256:35db505eaa3a2b9e0553161c84bfd5d4d332bd00919887286f0e942ab212c3c2",
+      "evidence_id": "ev:natcomputsci.materials",
+      "evidence_text": "Submission materials include manuscript and cover letter, with supplementary information optional and up to 10 Extended Data items.",
+      "locator": "Submission materials",
+      "source_id": "src:natcomputsci.preparing"
+    }
+  ],
+  "freshness_window_days": 180,
+  "journal": {
+    "issn": [
+      "2662-8457"
+    ],
+    "journal_url": "https://www.nature.com/natcomputsci/",
+    "name": "Nature Computational Science",
+    "publisher": "Nature Portfolio"
+  },
+  "last_verified_at": "2026-09-29T00:00:00Z",
+  "parents": [
+    {
+      "profile_id": "journal:nature-computational-science",
+      "profile_version": "1.1.0"
+    }
+  ],
+  "precedence": 300,
+  "profile_id": "article-type:nature-computational-science/article",
+  "profile_kind": "ARTICLE_TYPE",
+  "profile_version": "1.1.0",
+  "rules": [
+    {
+      "applicability": "This profile",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "NONE",
+      "category": "IDENTITY",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "METADATA_ARTICLE_TYPE",
+      "machine_checkable": true,
+      "operator": "EQ",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:natcomputsci.limits",
+          "source_id": "src:natcomputsci.content"
+        }
+      ],
+      "rule_id": "identity.article_type",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "VERIFIED",
+      "target": "article_type",
+      "unit": null,
+      "value": "Article"
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "LIMIT",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "ABSTRACT_TEXT",
+      "machine_checkable": true,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:natcomputsci.limits",
+          "source_id": "src:natcomputsci.content"
+        }
+      ],
+      "rule_id": "abstract.max_words",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "VERIFIED",
+      "target": "abstract",
+      "unit": "words",
+      "value": 150
+    },
+    {
+      "applicability": "Article; excludes abstract, Methods, references and legends",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "LIMIT",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "MAIN_BODY_EXCLUDING_ABSTRACT_METHODS_REFERENCES_FIGURE_LEGENDS_TABLES_SUPPLEMENT",
+      "machine_checkable": true,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:natcomputsci.limits",
+          "source_id": "src:natcomputsci.content"
+        }
+      ],
+      "rule_id": "main_text.max_words",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "VERIFIED",
+      "target": "main_text",
+      "unit": "words",
+      "value": 3500
+    },
+    {
+      "applicability": "Article; guideline",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "REFERENCE",
+      "confidence": "MEDIUM",
+      "critical_for_readiness": false,
+      "evaluation_scope": "REFERENCE_OBJECTS",
+      "machine_checkable": false,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:natcomputsci.limits",
+          "source_id": "src:natcomputsci.content"
+        }
+      ],
+      "rule_id": "references.max_count",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "PARTIAL",
+      "target": "references",
+      "unit": "references",
+      "value": 50
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "FIGURE",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "FIGURE_AND_TABLE_OBJECTS",
+      "machine_checkable": true,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:natcomputsci.limits",
+          "source_id": "src:natcomputsci.content"
+        }
+      ],
+      "rule_id": "display_items.max_count",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "VERIFIED",
+      "target": "figures_and_tables",
+      "unit": "items",
+      "value": 6
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "SECTION",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "CANONICAL_SECTION_TYPES_AND_ORDER",
+      "machine_checkable": false,
+      "operator": "EQ",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:natcomputsci.structure",
+          "source_id": "src:natcomputsci.content-structure"
+        }
+      ],
+      "rule_id": "sections.required",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "VERIFIED",
+      "target": "section_order",
+      "unit": null,
+      "value": [
+        "Introduction",
+        "Results",
+        "Discussion",
+        "Online Methods"
+      ]
+    },
+    {
+      "applicability": "Initial submission",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "FILE",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "METADATA_COVER_LETTER_PRESENT",
+      "machine_checkable": true,
+      "operator": "EXISTS",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:natcomputsci.materials",
+          "source_id": "src:natcomputsci.preparing"
+        }
+      ],
+      "rule_id": "cover_letter.required",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "VERIFIED",
+      "target": "cover_letter",
+      "unit": null,
+      "value": true
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "NONE",
+      "category": "FILE",
+      "confidence": "HIGH",
+      "critical_for_readiness": false,
+      "evaluation_scope": "SUPPLEMENTARY_OBJECTS",
+      "machine_checkable": false,
+      "operator": "EXISTS",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:natcomputsci.materials",
+          "source_id": "src:natcomputsci.preparing"
+        }
+      ],
+      "rule_id": "supplement.allowed",
+      "rule_version": "1.0.0",
+      "severity": "INFO",
+      "status": "VERIFIED",
+      "target": "supplementary_information",
+      "unit": null,
+      "value": "OPTIONAL"
+    },
+    {
+      "applicability": "If Extended Data are used",
+      "applicability_mode": "CONDITIONAL",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "FIGURE",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "EXTENDED_DATA_OBJECTS",
+      "machine_checkable": false,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:natcomputsci.materials",
+          "source_id": "src:natcomputsci.preparing"
+        }
+      ],
+      "rule_id": "extended_data.max_count",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "VERIFIED",
+      "target": "extended_data",
+      "unit": "items",
+      "value": 10
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "NONE",
+      "category": "LIMIT",
+      "confidence": "UNKNOWN",
+      "critical_for_readiness": true,
+      "evaluation_scope": "TITLE_TEXT",
+      "machine_checkable": true,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [],
+      "rule_id": "title.max_words",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "UNKNOWN",
+      "target": "title",
+      "unit": "words",
+      "value": "UNKNOWN"
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "UNKNOWN",
+      "autofix_class": "NONE",
+      "category": "STATEMENT",
+      "confidence": "UNKNOWN",
+      "critical_for_readiness": false,
+      "evaluation_scope": "STATEMENT_CODE_AVAILABILITY",
+      "machine_checkable": false,
+      "operator": "EXISTS",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [],
+      "rule_id": "statements.code_availability.required",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "UNKNOWN",
+      "target": "code_availability",
+      "unit": null,
+      "value": "UNKNOWN"
+    },
+    {
+      "applicability": "Where applicable",
+      "applicability_mode": "UNKNOWN",
+      "autofix_class": "NONE",
+      "category": "STATEMENT",
+      "confidence": "UNKNOWN",
+      "critical_for_readiness": false,
+      "evaluation_scope": "STATEMENT_ETHICS_CONSENT",
+      "machine_checkable": false,
+      "operator": "EXISTS",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [],
+      "rule_id": "statements.ethics_consent.required",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "UNKNOWN",
+      "target": "ethics_and_consent",
+      "unit": null,
+      "value": "UNKNOWN"
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "UNKNOWN",
+      "autofix_class": "NONE",
+      "category": "FILE",
+      "confidence": "UNKNOWN",
+      "critical_for_readiness": false,
+      "evaluation_scope": "SUBMISSION_TITLE_PAGE",
+      "machine_checkable": false,
+      "operator": "CUSTOM",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [],
+      "rule_id": "title_page.requirements",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "UNKNOWN",
+      "target": "title_page",
+      "unit": null,
+      "value": "UNKNOWN"
+    },
+    {
+      "applicability": "Initial submission",
+      "applicability_mode": "UNKNOWN",
+      "autofix_class": "NONE",
+      "category": "FILE",
+      "confidence": "UNKNOWN",
+      "critical_for_readiness": false,
+      "evaluation_scope": "SUBMISSION_FILE_INVENTORY",
+      "machine_checkable": false,
+      "operator": "EXISTS",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [],
+      "rule_id": "figures.separate_files",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "UNKNOWN",
+      "target": "figure_files",
+      "unit": null,
+      "value": "UNKNOWN"
+    }
+  ],
+  "schema_version": "2.1.0",
+  "source_snapshot_version": "1.1.0",
+  "sources": [
+    {
+      "content_stored": false,
+      "owner": "Nature Computational Science",
+      "retrieved_at": "2026-09-29T00:00:00Z",
+      "snapshot_hash": "sha256:6843bd89939179b5622c65e7272deb0ebd7ae7f6ef71a33a59d52f46ce7a5dce",
+      "snapshot_scope": "EVIDENCE_EXTRACT",
+      "source_id": "src:natcomputsci.content",
+      "source_title": "Nature Computational Science: Content types",
+      "source_type": "OFFICIAL_ARTICLE_TYPE_GUIDELINE",
+      "source_url": "https://www.nature.com/natcomputsci/content",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "content_stored": false,
+      "owner": "Nature Computational Science",
+      "retrieved_at": "2026-09-29T00:00:00Z",
+      "snapshot_hash": "sha256:877dfe89e5e75b917fa7ef70fb28db4a737a0f68afc7a8a3d6605c421fa097a9",
+      "snapshot_scope": "EVIDENCE_EXTRACT",
+      "source_id": "src:natcomputsci.content-structure",
+      "source_title": "Nature Computational Science: Content types",
+      "source_type": "OFFICIAL_ARTICLE_TYPE_GUIDELINE",
+      "source_url": "https://www.nature.com/natcomputsci/content",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "content_stored": false,
+      "owner": "Nature Computational Science",
+      "retrieved_at": "2026-09-29T00:00:00Z",
+      "snapshot_hash": "sha256:35db505eaa3a2b9e0553161c84bfd5d4d332bd00919887286f0e942ab212c3c2",
+      "snapshot_scope": "EVIDENCE_EXTRACT",
+      "source_id": "src:natcomputsci.preparing",
+      "source_title": "Preparing your submission",
+      "source_type": "OFFICIAL_JOURNAL_GUIDELINE",
+      "source_url": "https://www.nature.com/natcomputsci/submission-guidelines/preparing-your-submission",
+      "verification_status": "VERIFIED"
+    }
+  ],
+  "status": "PARTIAL"
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/skill_registry.schema.json",
+  "title": "JournalPort skill registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "skills"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "skills": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["skill_id", "version", "description", "entry_point", "requires_journalport", "inputs", "outputs", "capabilities", "safety_level"],
+        "properties": {
+          "skill_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+          "description": {"type": "string", "minLength": 1},
+          "entry_point": {"type": "string", "pattern": "^[^/]+/SKILL\\.md$"},
+          "requires_journalport": {"type": "string", "minLength": 2},
+          "inputs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "outputs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "capabilities": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "safety_level": {"enum": ["READ_ONLY", "DRAFT_ONLY", "APPROVAL_GATED", "ARTIFACT_BUILD"]}
+        }
+      }
+    }
+  }
+}

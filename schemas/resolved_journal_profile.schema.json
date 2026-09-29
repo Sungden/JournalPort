@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/resolved_journal_profile.schema.json",
+  "title": "JournalPort ResolvedJournalProfile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "resolved_profile_version", "root_profile_id", "pinned_profiles", "effective_rules", "resolution_trace", "conflicts", "status", "resolved_profile_hash"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"}, "resolved_profile_version": {"type": "string"}, "root_profile_id": {"type": "string"},
+    "pinned_profiles": {"type": "array", "items": {"type": "object"}}, "effective_rules": {"type": "array", "items": {"type": "object"}},
+    "resolution_trace": {"type": "array", "items": {"type": "object", "required": ["rule_id", "candidates", "selected_profile_id", "classification", "conflicts", "provenance_chain"]}},
+    "conflicts": {"type": "array", "items": {"type": "object"}}, "status": {"enum": ["VERIFIED", "PARTIAL", "STALE", "CONFLICTED", "UNKNOWN"]},
+    "resolved_profile_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+  }
+}
+

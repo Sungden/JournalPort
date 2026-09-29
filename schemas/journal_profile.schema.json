@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v2/journal_profile.schema.json",
+  "title": "JournalPort Versioned Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile_id", "display_name", "profile_version", "source_snapshot_version", "profile_kind", "precedence", "parents", "journal", "article_type", "sources", "evidence", "rules", "last_verified_at", "freshness_window_days", "status"],
+  "$defs": {
+    "semver": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"},
+    "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "profileId": {"type": "string", "pattern": "^(publisher|journal|article-type):[a-z0-9][a-z0-9./-]+$"},
+    "profileRef": {"type": "object", "additionalProperties": false, "required": ["profile_id", "profile_version"], "properties": {"profile_id": {"$ref": "#/$defs/profileId"}, "profile_version": {"$ref": "#/$defs/semver"}}},
+    "source": {"type": "object", "additionalProperties": false, "required": ["source_id", "source_url", "source_type", "retrieved_at", "source_title", "owner", "snapshot_hash", "snapshot_scope", "content_stored", "verification_status"], "properties": {
+      "source_id": {"type": "string", "pattern": "^src:[a-z0-9][a-z0-9.-]+$"},
+      "source_url": {"type": "string", "format": "uri", "pattern": "^https://"},
+      "source_type": {"enum": ["OFFICIAL_JOURNAL_GUIDELINE", "OFFICIAL_PUBLISHER_GUIDELINE", "OFFICIAL_ARTICLE_TYPE_GUIDELINE", "OFFICIAL_SUBMISSION_PORTAL", "OFFICIAL_TEMPLATE", "OFFICIAL_POLICY", "SECONDARY_SOURCE", "UNKNOWN"]},
+      "retrieved_at": {"type": "string", "format": "date-time"}, "source_title": {"type": "string", "minLength": 1}, "owner": {"type": "string", "minLength": 1},
+      "snapshot_hash": {"$ref": "#/$defs/sha256"}, "snapshot_scope": {"enum": ["EVIDENCE_EXTRACT", "FULL_CONTENT"]}, "content_stored": {"type": "boolean"}, "verification_status": {"enum": ["VERIFIED", "PARTIAL", "UNKNOWN", "STALE"]}
+    }},
+    "evidence": {"type": "object", "additionalProperties": false, "required": ["evidence_id", "source_id", "locator", "evidence_text", "evidence_hash"], "properties": {
+      "evidence_id": {"type": "string", "pattern": "^ev:[a-z0-9][a-z0-9.-]+$"}, "source_id": {"type": "string", "pattern": "^src:[a-z0-9][a-z0-9.-]+$"},
+      "locator": {"type": "string", "minLength": 1}, "evidence_text": {"type": "string", "minLength": 1, "maxLength": 500}, "evidence_hash": {"$ref": "#/$defs/sha256"}
+    }},
+    "provenanceRef": {"type": "object", "additionalProperties": false, "required": ["source_id", "evidence_id"], "properties": {"source_id": {"type": "string", "pattern": "^src:[a-z0-9][a-z0-9.-]+$"}, "evidence_id": {"type": "string", "pattern": "^ev:[a-z0-9][a-z0-9.-]+$"}}},
+    "rule": {"type": "object", "additionalProperties": false, "required": ["rule_id", "rule_version", "category", "target", "operator", "value", "unit", "severity", "applicability", "machine_checkable", "autofix_class", "provenance", "confidence", "status", "override_of", "override_reason"], "properties": {
+      "rule_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]{2,127}$"}, "rule_version": {"$ref": "#/$defs/semver"},
+      "category": {"enum": ["IDENTITY", "LIMIT", "SECTION", "STATEMENT", "REFERENCE", "FIGURE", "TABLE", "FILE", "FORMATTING", "POLICY", "OTHER"]},
+      "target": {"type": "string", "minLength": 1}, "operator": {"enum": ["EQ", "NE", "LT", "LTE", "GT", "GTE", "IN", "NOT_IN", "MATCHES", "EXISTS", "NOT_EXISTS", "PRECEDES", "CUSTOM"]},
+      "value": {}, "unit": {"type": ["string", "null"]}, "severity": {"enum": ["INFO", "WARNING", "BLOCKING"]}, "applicability": {"type": "string", "minLength": 1},
+      "machine_checkable": {"type": "boolean"}, "autofix_class": {"enum": ["SAFE_AUTOMATIC", "CONTENT_PRESERVING_AUTOMATIC", "AUTHOR_APPROVAL_REQUIRED", "FORBIDDEN_AUTOMATIC", "NONE"]},
+      "provenance": {"type": "array", "items": {"$ref": "#/$defs/provenanceRef"}, "uniqueItems": true},
+      "confidence": {"enum": ["HIGH", "MEDIUM", "LOW", "UNKNOWN"]}, "status": {"enum": ["VERIFIED", "PARTIAL", "UNKNOWN", "CONFLICTED", "STALE", "NOT_APPLICABLE"]},
+      "override_of": {"type": ["string", "null"]}, "override_reason": {"type": ["string", "null"]}
+      ,"applicability_mode": {"enum": ["ALWAYS", "CONDITIONAL", "NOT_APPLICABLE", "UNKNOWN"]}, "critical_for_readiness": {"type": "boolean"}, "evaluation_scope": {"type": "string", "minLength": 1}
+    }}
+  },
+  "allOf": [{"if": {"properties": {"schema_version": {"const": "2.1.0"}}}, "then": {"properties": {"rules": {"items": {"required": ["applicability_mode", "critical_for_readiness", "evaluation_scope"]}}}}}],
+  "properties": {
+    "schema_version": {"enum": ["2.0.0", "2.1.0"]}, "profile_id": {"$ref": "#/$defs/profileId"}, "display_name": {"type": "string", "minLength": 1},
+    "profile_version": {"$ref": "#/$defs/semver"}, "source_snapshot_version": {"$ref": "#/$defs/semver"}, "profile_kind": {"enum": ["PUBLISHER", "JOURNAL", "ARTICLE_TYPE"]},
+    "precedence": {"enum": [100, 200, 300]}, "parents": {"type": "array", "items": {"$ref": "#/$defs/profileRef"}, "uniqueItems": true},
+    "journal": {"oneOf": [{"type": "null"}, {"type": "object", "additionalProperties": false, "required": ["name", "publisher", "issn", "journal_url"], "properties": {"name": {"type": "string"}, "publisher": {"type": "string"}, "issn": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}, "journal_url": {"type": "string", "format": "uri", "pattern": "^https://"}}}]},
+    "article_type": {"type": ["string", "null"]}, "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}, "uniqueItems": true},
+    "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}, "uniqueItems": true}, "rules": {"type": "array", "items": {"$ref": "#/$defs/rule"}},
+    "last_verified_at": {"type": "string", "format": "date-time"}, "freshness_window_days": {"type": "integer", "minimum": 1, "maximum": 3650},
+    "status": {"enum": ["VERIFIED", "PARTIAL", "UNKNOWN", "CONFLICTED", "STALE"]}
+  }
+}
+

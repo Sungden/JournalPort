@@ -1,0 +1,30 @@
+{
+  "schema_version": "2.0.0",
+  "profile_id": "publisher:nature-portfolio",
+  "display_name": "Nature Portfolio",
+  "profile_version": "1.0.0",
+  "source_snapshot_version": "1.0.0",
+  "profile_kind": "PUBLISHER",
+  "precedence": 100,
+  "parents": [],
+  "journal": null,
+  "article_type": null,
+  "sources": [
+    {"source_id":"src:nature-portfolio.competing-interests","source_url":"https://www.nature.com/nature/editorial-policies/competing-interests","source_type":"OFFICIAL_POLICY","retrieved_at":"2026-09-29T00:00:00Z","source_title":"Competing interests","owner":"Nature Portfolio","snapshot_hash":"sha256:fabab10a4475519a98cd9c2c1d334dd451dec100da6503fb6b34158165635275","snapshot_scope":"EVIDENCE_EXTRACT","content_stored":false,"verification_status":"VERIFIED"},
+    {"source_id":"src:nature-portfolio.reporting-standards","source_url":"https://www.nature.com/ncomms/editorial-policies/reporting-standards","source_type":"OFFICIAL_POLICY","retrieved_at":"2026-09-29T00:00:00Z","source_title":"Reporting standards and availability of data, materials, code and protocols","owner":"Nature Portfolio","snapshot_hash":"sha256:ab48b481066d4149f6189958888ab47626b9f6538952a2cf0ffe7c05bd2eab17","snapshot_scope":"EVIDENCE_EXTRACT","content_stored":false,"verification_status":"VERIFIED"},
+    {"source_id":"src:nature-portfolio.authorship","source_url":"https://www.nature.com/nature/editorial-policies/authorship","source_type":"OFFICIAL_POLICY","retrieved_at":"2026-09-29T00:00:00Z","source_title":"Authorship","owner":"Nature Portfolio","snapshot_hash":"sha256:c99e7a72f23290dee28713931bf6587ad5fcdd4c17043d4678a8f526fcb99aa9","snapshot_scope":"EVIDENCE_EXTRACT","content_stored":false,"verification_status":"VERIFIED"}
+  ],
+  "evidence": [
+    {"evidence_id":"ev:nature-portfolio.competing-interests","source_id":"src:nature-portfolio.competing-interests","locator":"Application to authors","evidence_text":"Nature Portfolio requires competing-interest declarations from authors; the corresponding author submits the statement for all authors.","evidence_hash":"sha256:fabab10a4475519a98cd9c2c1d334dd451dec100da6503fb6b34158165635275"},
+    {"evidence_id":"ev:nature-portfolio.data-availability","source_id":"src:nature-portfolio.reporting-standards","locator":"Availability of data","evidence_text":"Original-research manuscripts in Nature Portfolio journals must include a data-availability statement.","evidence_hash":"sha256:ab48b481066d4149f6189958888ab47626b9f6538952a2cf0ffe7c05bd2eab17"},
+    {"evidence_id":"ev:nature-portfolio.author-contributions","source_id":"src:nature-portfolio.authorship","locator":"Author contribution statements","evidence_text":"Nature Portfolio requires an author-contribution statement specifying every author's contribution.","evidence_hash":"sha256:c99e7a72f23290dee28713931bf6587ad5fcdd4c17043d4678a8f526fcb99aa9"}
+  ],
+  "rules": [
+    {"rule_id":"statements.competing_interests.required","rule_version":"1.0.0","category":"STATEMENT","target":"competing_interests","operator":"EXISTS","value":true,"unit":null,"severity":"BLOCKING","applicability":"All Nature Portfolio Article submissions","machine_checkable":true,"autofix_class":"AUTHOR_APPROVAL_REQUIRED","provenance":[{"source_id":"src:nature-portfolio.competing-interests","evidence_id":"ev:nature-portfolio.competing-interests"}],"confidence":"HIGH","status":"VERIFIED","override_of":null,"override_reason":null},
+    {"rule_id":"statements.data_availability.required","rule_version":"1.0.0","category":"STATEMENT","target":"data_availability","operator":"EXISTS","value":true,"unit":null,"severity":"BLOCKING","applicability":"Original research intended for publication","machine_checkable":true,"autofix_class":"AUTHOR_APPROVAL_REQUIRED","provenance":[{"source_id":"src:nature-portfolio.reporting-standards","evidence_id":"ev:nature-portfolio.data-availability"}],"confidence":"HIGH","status":"VERIFIED","override_of":null,"override_reason":null},
+    {"rule_id":"statements.author_contributions.required","rule_version":"1.0.0","category":"STATEMENT","target":"author_contributions","operator":"EXISTS","value":true,"unit":null,"severity":"BLOCKING","applicability":"Nature Portfolio Article manuscripts","machine_checkable":true,"autofix_class":"AUTHOR_APPROVAL_REQUIRED","provenance":[{"source_id":"src:nature-portfolio.authorship","evidence_id":"ev:nature-portfolio.author-contributions"}],"confidence":"HIGH","status":"VERIFIED","override_of":null,"override_reason":null}
+  ],
+  "last_verified_at":"2026-09-29T00:00:00Z",
+  "freshness_window_days":180,
+  "status":"PARTIAL"
+}

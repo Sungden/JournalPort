@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0.0",
+  "legitimate_cases": [
+    "byte_preserving_copy",
+    "filename_only_change",
+    "source_locator_only_change",
+    "three_real_profile_candidates"
+  ],
+  "unexpected_change_cases": [
+    "numeric_change",
+    "equation_change",
+    "citation_mapping_change",
+    "reference_identity_change",
+    "asset_hash_change",
+    "table_content_change",
+    "different_source_candidate"
+  ],
+  "tamper_cases": [
+    "source_hash_mismatch",
+    "candidate_hash_mismatch",
+    "plan_hash_mismatch",
+    "profile_hash_mismatch",
+    "ghost_action",
+    "duplicate_action",
+    "manifest_action_mismatch"
+  ],
+  "postcondition_cases": ["expected_filename_present", "expected_filename_absent"],
+  "compliance_delta_cases": ["new_blocker", "resolved_finding", "profile_mismatch"]
+}

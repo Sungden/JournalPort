@@ -1,0 +1,32 @@
+{
+  "migration_id":"m2.5-m3.1-semantic-2026-09-29",
+  "policy":"ADR-010",
+  "target_schema_version":"2.1.0",
+  "target_profile_version":"1.1.0",
+  "rules":{
+    "identity.article_type":{"applicability_mode":"ALWAYS","critical_for_readiness":true,"machine_checkable":true,"evaluation_scope":"METADATA_ARTICLE_TYPE","decision":"Official article-type page identifies Article; identity is a mandatory package selector."},
+    "title.max_words":{"applicability_mode":"ALWAYS","critical_for_readiness":true,"machine_checkable":true,"evaluation_scope":"TITLE_TEXT","decision":"Only remains evaluable where the rule is VERIFIED; UNKNOWN rules stay manual through rule status."},
+    "abstract.max_words":{"applicability_mode":"ALWAYS","critical_for_readiness":true,"machine_checkable":true,"evaluation_scope":"ABSTRACT_TEXT","decision":"Explicit hard maximum with canonical abstract scope."},
+    "main_text.max_words":{"applicability_mode":"ALWAYS","critical_for_readiness":true,"machine_checkable":true,"evaluation_scope":"MAIN_BODY_EXCLUDING_ABSTRACT_METHODS_REFERENCES_FIGURE_LEGENDS_TABLES_SUPPLEMENT","decision":"Explicit source exclusions; PARTIAL Nature Communications rule remains non-evaluable by override below."},
+    "references.max_count":{"applicability_mode":"ALWAYS","critical_for_readiness":false,"machine_checkable":false,"evaluation_scope":"REFERENCE_OBJECTS","decision":"Official pages describe the count as a guideline, not a hard maximum."},
+    "display_items.max_count":{"applicability_mode":"ALWAYS","critical_for_readiness":true,"machine_checkable":true,"evaluation_scope":"FIGURE_AND_TABLE_OBJECTS","decision":"Hard maximum where VERIFIED; qualified Nature Communications rule is disabled below."},
+    "sections.required":{"applicability_mode":"ALWAYS","critical_for_readiness":true,"machine_checkable":false,"evaluation_scope":"CANONICAL_SECTION_TYPES_AND_ORDER","decision":"Required structure is official, but unheaded Introduction and conditional sections make current deterministic selector incomplete."},
+    "cover_letter.required":{"applicability_mode":"ALWAYS","critical_for_readiness":true,"machine_checkable":true,"evaluation_scope":"METADATA_COVER_LETTER_PRESENT","decision":"Required submission component, evaluated only when canonical submission metadata is present."},
+    "supplement.allowed":{"applicability_mode":"ALWAYS","critical_for_readiness":false,"machine_checkable":false,"evaluation_scope":"SUPPLEMENTARY_OBJECTS","decision":"Optional permission is not an existence requirement; current EXISTS representation is not executable."},
+    "extended_data.max_count":{"applicability_mode":"CONDITIONAL","critical_for_readiness":true,"machine_checkable":false,"evaluation_scope":"EXTENDED_DATA_OBJECTS","decision":"Official maximum applies only when Extended Data are used; canonical model lacks a distinct deterministic collection."},
+    "figures.separate_files":{"applicability_mode":"UNKNOWN","critical_for_readiness":false,"machine_checkable":false,"evaluation_scope":"SUBMISSION_FILE_INVENTORY","decision":"Current evidence and initial-submission alternatives do not establish unconditional applicability."},
+    "statements.author_contributions.required":{"applicability_mode":"ALWAYS","critical_for_readiness":true,"machine_checkable":true,"evaluation_scope":"STATEMENT_AUTHOR_CONTRIBUTIONS","decision":"Publisher-wide required declaration."},
+    "statements.competing_interests.required":{"applicability_mode":"ALWAYS","critical_for_readiness":true,"machine_checkable":true,"evaluation_scope":"STATEMENT_COMPETING_INTERESTS","decision":"Publisher-wide required declaration."},
+    "statements.data_availability.required":{"applicability_mode":"ALWAYS","critical_for_readiness":true,"machine_checkable":true,"evaluation_scope":"STATEMENT_DATA_AVAILABILITY","decision":"Publisher-wide original-research declaration."},
+    "statements.code_availability.required":{"applicability_mode":"UNKNOWN","critical_for_readiness":false,"machine_checkable":false,"evaluation_scope":"STATEMENT_CODE_AVAILABILITY","decision":"Current profile evidence does not establish a complete journal/article applicability condition."},
+    "statements.ethics_consent.required":{"applicability_mode":"UNKNOWN","critical_for_readiness":false,"machine_checkable":false,"evaluation_scope":"STATEMENT_ETHICS_CONSENT","decision":"Current profile evidence does not establish applicability; not promoted to CONDITIONAL without evidence."},
+    "title_page.requirements":{"applicability_mode":"UNKNOWN","critical_for_readiness":false,"machine_checkable":false,"evaluation_scope":"SUBMISSION_TITLE_PAGE","decision":"Current evidence is insufficient."}
+  },
+  "profile_overrides":{
+    "article-type:nature-communications/article":{
+      "main_text.max_words":{"critical_for_readiness":false,"machine_checkable":false,"decision":"Official wording is ideal rather than mandatory; scope is explicit but rule remains PARTIAL."},
+      "display_items.max_count":{"critical_for_readiness":false,"machine_checkable":false,"decision":"Maximum depends on word count and the current rule does not encode the conditional tiers."},
+      "sections.required":{"applicability_mode":"CONDITIONAL","critical_for_readiness":false,"machine_checkable":false,"decision":"Discussion and Methods are explicitly qualified as if appropriate."}
+    }
+  }
+}

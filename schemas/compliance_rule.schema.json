@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/compliance_rule.schema.json",
+  "title": "JournalPort ComplianceRule",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "rule_id", "rule_type", "target_object", "operator", "expected_value", "severity", "source_references", "machine_checkable", "autofix_class", "description"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "rule_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]{2,127}$"},
+    "rule_type": {"enum": ["NUMERIC_LIMIT", "REQUIRED", "FORBIDDEN", "ORDERING", "FORMAT", "PATTERN", "ENUMERATION", "CONSISTENCY", "PRESENCE", "CUSTOM"]},
+    "target_object": {"type": "string", "minLength": 1},
+    "operator": {"enum": ["EQ", "NE", "LT", "LTE", "GT", "GTE", "IN", "NOT_IN", "MATCHES", "EXISTS", "NOT_EXISTS", "PRECEDES", "CUSTOM"]},
+    "expected_value": {},
+    "units": {"type": ["string", "null"]},
+    "severity": {"enum": ["INFO", "WARNING", "BLOCKING"]},
+    "source_references": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]+$"}},
+    "machine_checkable": {"type": "boolean"},
+    "validator_id": {"type": ["string", "null"], "pattern": "^[a-z][a-z0-9_.-]+$"},
+    "autofix_class": {"enum": ["SAFE_AUTOMATIC", "CONTENT_PRESERVING_AUTOMATIC", "AUTHOR_APPROVAL_REQUIRED", "FORBIDDEN_AUTOMATIC", "NONE"]},
+    "description": {"type": "string", "minLength": 1},
+    "recommended_action": {"type": ["string", "null"]},
+    "supersedes_rule_id": {"type": ["string", "null"]}
+  },
+  "allOf": [
+    {"if": {"properties": {"machine_checkable": {"const": true}}}, "then": {"required": ["validator_id"], "properties": {"validator_id": {"type": "string"}}}},
+    {"if": {"properties": {"autofix_class": {"const": "FORBIDDEN_AUTOMATIC"}}}, "then": {"properties": {"recommended_action": {"type": ["string", "null"]}}}}
+  ]
+}
+

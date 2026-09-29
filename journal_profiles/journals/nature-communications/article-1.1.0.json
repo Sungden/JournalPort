@@ -1,0 +1,425 @@
+{
+  "article_type": "Article",
+  "display_name": "Nature Communications — Article",
+  "evidence": [
+    {
+      "evidence_hash": "sha256:bd7021c9b0acbdf6965f927de628642e9d785765d3e8eca3844b6996ea6920c8",
+      "evidence_id": "ev:ncomms.article-limits",
+      "evidence_text": "Article limits: title 15 words; abstract 200 words; main text ideally 5,000 words; references guideline 70; display items up to 10.",
+      "locator": "Article > Format",
+      "source_id": "src:ncomms.article"
+    },
+    {
+      "evidence_hash": "sha256:c90e865873f6b16328b544e63003da428fe36bf6c77003cbb6a96dccf18b80d0",
+      "evidence_id": "ev:ncomms.article-structure",
+      "evidence_text": "Article structure uses Introduction, Results, Discussion where appropriate, and Methods where appropriate; footnotes are not used.",
+      "locator": "Article > Format",
+      "source_id": "src:ncomms.article-structure"
+    },
+    {
+      "evidence_hash": "sha256:c98007658e4fc67fc0a0fd778a8e5de6c393e5abd828b02748aba6e0c0543e4b",
+      "evidence_id": "ev:ncomms.initial-files",
+      "evidence_text": "Initial submissions may be Word, TeX or PDF, in one file up to 30 MB; supplementary information is separate.",
+      "locator": "Initial submission",
+      "source_id": "src:ncomms.how-to-submit"
+    },
+    {
+      "evidence_hash": "sha256:99f5dc400fbc10e655e83b0a2f0afa1a9a669ae676a32c35567d3798d53b86b7",
+      "evidence_id": "ev:ncomms.submission-materials",
+      "evidence_text": "Online submission includes a cover letter, manuscript text, individual figure files and optional supplementary information.",
+      "locator": "Online submission",
+      "source_id": "src:ncomms.how-to-submit"
+    }
+  ],
+  "freshness_window_days": 180,
+  "journal": {
+    "issn": [
+      "2041-1723"
+    ],
+    "journal_url": "https://www.nature.com/ncomms/",
+    "name": "Nature Communications",
+    "publisher": "Nature Portfolio"
+  },
+  "last_verified_at": "2026-09-29T00:00:00Z",
+  "parents": [
+    {
+      "profile_id": "journal:nature-communications",
+      "profile_version": "1.1.0"
+    }
+  ],
+  "precedence": 300,
+  "profile_id": "article-type:nature-communications/article",
+  "profile_kind": "ARTICLE_TYPE",
+  "profile_version": "1.1.0",
+  "rules": [
+    {
+      "applicability": "This profile",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "NONE",
+      "category": "IDENTITY",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "METADATA_ARTICLE_TYPE",
+      "machine_checkable": true,
+      "operator": "EQ",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:ncomms.article-limits",
+          "source_id": "src:ncomms.article"
+        }
+      ],
+      "rule_id": "identity.article_type",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "VERIFIED",
+      "target": "article_type",
+      "unit": null,
+      "value": "Article"
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "LIMIT",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "TITLE_TEXT",
+      "machine_checkable": true,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:ncomms.article-limits",
+          "source_id": "src:ncomms.article"
+        }
+      ],
+      "rule_id": "title.max_words",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "VERIFIED",
+      "target": "title",
+      "unit": "words",
+      "value": 15
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "LIMIT",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "ABSTRACT_TEXT",
+      "machine_checkable": true,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:ncomms.article-limits",
+          "source_id": "src:ncomms.article"
+        }
+      ],
+      "rule_id": "abstract.max_words",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "VERIFIED",
+      "target": "abstract",
+      "unit": "words",
+      "value": 200
+    },
+    {
+      "applicability": "Article; stated as ideal, excluding abstract, Methods, references and figure legends",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "LIMIT",
+      "confidence": "MEDIUM",
+      "critical_for_readiness": false,
+      "evaluation_scope": "MAIN_BODY_EXCLUDING_ABSTRACT_METHODS_REFERENCES_FIGURE_LEGENDS_TABLES_SUPPLEMENT",
+      "machine_checkable": false,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:ncomms.article-limits",
+          "source_id": "src:ncomms.article"
+        }
+      ],
+      "rule_id": "main_text.max_words",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "PARTIAL",
+      "target": "main_text",
+      "unit": "words",
+      "value": 5000
+    },
+    {
+      "applicability": "Article; guideline",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "REFERENCE",
+      "confidence": "MEDIUM",
+      "critical_for_readiness": false,
+      "evaluation_scope": "REFERENCE_OBJECTS",
+      "machine_checkable": false,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:ncomms.article-limits",
+          "source_id": "src:ncomms.article"
+        }
+      ],
+      "rule_id": "references.max_count",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "PARTIAL",
+      "target": "references",
+      "unit": "references",
+      "value": 70
+    },
+    {
+      "applicability": "Article; allowance depends on manuscript length",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "FIGURE",
+      "confidence": "MEDIUM",
+      "critical_for_readiness": false,
+      "evaluation_scope": "FIGURE_AND_TABLE_OBJECTS",
+      "machine_checkable": false,
+      "operator": "LTE",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:ncomms.article-limits",
+          "source_id": "src:ncomms.article"
+        }
+      ],
+      "rule_id": "display_items.max_count",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "PARTIAL",
+      "target": "figures_and_tables",
+      "unit": "items",
+      "value": 10
+    },
+    {
+      "applicability": "Article; Discussion and Methods where appropriate",
+      "applicability_mode": "CONDITIONAL",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "SECTION",
+      "confidence": "MEDIUM",
+      "critical_for_readiness": false,
+      "evaluation_scope": "CANONICAL_SECTION_TYPES_AND_ORDER",
+      "machine_checkable": false,
+      "operator": "EQ",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:ncomms.article-structure",
+          "source_id": "src:ncomms.article-structure"
+        }
+      ],
+      "rule_id": "sections.required",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "PARTIAL",
+      "target": "section_order",
+      "unit": null,
+      "value": [
+        "Introduction",
+        "Results",
+        "Discussion",
+        "Methods"
+      ]
+    },
+    {
+      "applicability": "Online submission",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "AUTHOR_APPROVAL_REQUIRED",
+      "category": "FILE",
+      "confidence": "HIGH",
+      "critical_for_readiness": true,
+      "evaluation_scope": "METADATA_COVER_LETTER_PRESENT",
+      "machine_checkable": true,
+      "operator": "EXISTS",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:ncomms.submission-materials",
+          "source_id": "src:ncomms.how-to-submit"
+        }
+      ],
+      "rule_id": "cover_letter.required",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "VERIFIED",
+      "target": "cover_letter",
+      "unit": null,
+      "value": true
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "ALWAYS",
+      "autofix_class": "NONE",
+      "category": "FILE",
+      "confidence": "HIGH",
+      "critical_for_readiness": false,
+      "evaluation_scope": "SUPPLEMENTARY_OBJECTS",
+      "machine_checkable": false,
+      "operator": "EXISTS",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:ncomms.submission-materials",
+          "source_id": "src:ncomms.how-to-submit"
+        }
+      ],
+      "rule_id": "supplement.allowed",
+      "rule_version": "1.0.0",
+      "severity": "INFO",
+      "status": "VERIFIED",
+      "target": "supplementary_information",
+      "unit": null,
+      "value": "OPTIONAL"
+    },
+    {
+      "applicability": "Online submission package; initial combined-file route also exists",
+      "applicability_mode": "UNKNOWN",
+      "autofix_class": "CONTENT_PRESERVING_AUTOMATIC",
+      "category": "FILE",
+      "confidence": "MEDIUM",
+      "critical_for_readiness": false,
+      "evaluation_scope": "SUBMISSION_FILE_INVENTORY",
+      "machine_checkable": false,
+      "operator": "EXISTS",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [
+        {
+          "evidence_id": "ev:ncomms.submission-materials",
+          "source_id": "src:ncomms.how-to-submit"
+        }
+      ],
+      "rule_id": "figures.separate_files",
+      "rule_version": "1.0.0",
+      "severity": "BLOCKING",
+      "status": "PARTIAL",
+      "target": "figure_files",
+      "unit": null,
+      "value": true
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "UNKNOWN",
+      "autofix_class": "NONE",
+      "category": "STATEMENT",
+      "confidence": "UNKNOWN",
+      "critical_for_readiness": false,
+      "evaluation_scope": "STATEMENT_CODE_AVAILABILITY",
+      "machine_checkable": false,
+      "operator": "EXISTS",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [],
+      "rule_id": "statements.code_availability.required",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "UNKNOWN",
+      "target": "code_availability",
+      "unit": null,
+      "value": "UNKNOWN"
+    },
+    {
+      "applicability": "Where research design makes it applicable",
+      "applicability_mode": "UNKNOWN",
+      "autofix_class": "NONE",
+      "category": "STATEMENT",
+      "confidence": "UNKNOWN",
+      "critical_for_readiness": false,
+      "evaluation_scope": "STATEMENT_ETHICS_CONSENT",
+      "machine_checkable": false,
+      "operator": "EXISTS",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [],
+      "rule_id": "statements.ethics_consent.required",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "UNKNOWN",
+      "target": "ethics_and_consent",
+      "unit": null,
+      "value": "UNKNOWN"
+    },
+    {
+      "applicability": "Article",
+      "applicability_mode": "UNKNOWN",
+      "autofix_class": "NONE",
+      "category": "FILE",
+      "confidence": "UNKNOWN",
+      "critical_for_readiness": false,
+      "evaluation_scope": "SUBMISSION_TITLE_PAGE",
+      "machine_checkable": false,
+      "operator": "CUSTOM",
+      "override_of": null,
+      "override_reason": null,
+      "provenance": [],
+      "rule_id": "title_page.requirements",
+      "rule_version": "1.0.0",
+      "severity": "WARNING",
+      "status": "UNKNOWN",
+      "target": "title_page",
+      "unit": null,
+      "value": "UNKNOWN"
+    }
+  ],
+  "schema_version": "2.1.0",
+  "source_snapshot_version": "1.1.0",
+  "sources": [
+    {
+      "content_stored": false,
+      "owner": "Nature Communications",
+      "retrieved_at": "2026-09-29T00:00:00Z",
+      "snapshot_hash": "sha256:bd7021c9b0acbdf6965f927de628642e9d785765d3e8eca3844b6996ea6920c8",
+      "snapshot_scope": "EVIDENCE_EXTRACT",
+      "source_id": "src:ncomms.article",
+      "source_title": "Nature Communications: Article",
+      "source_type": "OFFICIAL_ARTICLE_TYPE_GUIDELINE",
+      "source_url": "https://www.nature.com/ncomms/submit/article",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "content_stored": false,
+      "owner": "Nature Communications",
+      "retrieved_at": "2026-09-29T00:00:00Z",
+      "snapshot_hash": "sha256:c90e865873f6b16328b544e63003da428fe36bf6c77003cbb6a96dccf18b80d0",
+      "snapshot_scope": "EVIDENCE_EXTRACT",
+      "source_id": "src:ncomms.article-structure",
+      "source_title": "Nature Communications: Article",
+      "source_type": "OFFICIAL_ARTICLE_TYPE_GUIDELINE",
+      "source_url": "https://www.nature.com/ncomms/submit/article",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "content_stored": false,
+      "owner": "Nature Communications",
+      "retrieved_at": "2026-09-29T00:00:00Z",
+      "snapshot_hash": "sha256:7c746984e67606f08b49d08dc928eb019b923c7b739db583a179e41739a35af4",
+      "snapshot_scope": "EVIDENCE_EXTRACT",
+      "source_id": "src:ncomms.how-to-submit",
+      "source_title": "Nature Communications: How to submit",
+      "source_type": "OFFICIAL_SUBMISSION_PORTAL",
+      "source_url": "https://www.nature.com/ncomms/submit/how-to-submit",
+      "verification_status": "VERIFIED"
+    }
+  ],
+  "status": "PARTIAL"
+}

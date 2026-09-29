@@ -1,0 +1,13 @@
+{
+  "perfect_minimal":{"finding_status":"PASS","readiness":"SUBMISSION_READY"},
+  "abstract_too_long":{"finding_status":"BLOCKED","readiness":"BLOCKED"},
+  "missing_data_availability":{"finding_status":"BLOCKED","readiness":"BLOCKED"},
+  "missing_competing_interests":{"finding_status":"BLOCKED","readiness":"BLOCKED"},
+  "too_many_references":{"finding_status":"BLOCKED","readiness":"BLOCKED"},
+  "too_many_figures":{"finding_status":"BLOCKED","readiness":"BLOCKED"},
+  "missing_figure_asset":{"finding_status":"BLOCKED","readiness":"BLOCKED"},
+  "citation_reference_mismatch":{"finding_status":"BLOCKED","readiness":"BLOCKED"},
+  "conditional_rule_unknown":{"finding_status":"UNKNOWN","readiness":"REQUIRES_MANUAL_REVIEW"},
+  "unsupported_profile_rule":{"finding_status":"EVALUATION_ERROR","readiness":"EVALUATION_FAILED"},
+  "profile_unknown_case":{"finding_status":"UNKNOWN","readiness":"REQUIRES_MANUAL_REVIEW"}
+}

@@ -1,0 +1,30 @@
+{
+  "article_type": null,
+  "display_name": "Nature Computational Science",
+  "evidence": [],
+  "freshness_window_days": 180,
+  "journal": {
+    "issn": [
+      "2662-8457"
+    ],
+    "journal_url": "https://www.nature.com/natcomputsci/",
+    "name": "Nature Computational Science",
+    "publisher": "Nature Portfolio"
+  },
+  "last_verified_at": "2026-09-29T00:00:00Z",
+  "parents": [
+    {
+      "profile_id": "publisher:nature-portfolio",
+      "profile_version": "1.1.0"
+    }
+  ],
+  "precedence": 200,
+  "profile_id": "journal:nature-computational-science",
+  "profile_kind": "JOURNAL",
+  "profile_version": "1.1.0",
+  "rules": [],
+  "schema_version": "2.1.0",
+  "source_snapshot_version": "1.1.0",
+  "sources": [],
+  "status": "PARTIAL"
+}

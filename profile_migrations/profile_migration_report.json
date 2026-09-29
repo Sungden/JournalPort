@@ -1,0 +1,969 @@
+{
+  "migration_id": "m2.5-m3.1-semantic-2026-09-29",
+  "profiles": [
+    {
+      "evidence_changes": [],
+      "fields_added": [
+        "applicability_mode",
+        "critical_for_readiness",
+        "evaluation_scope"
+      ],
+      "manual_decisions": [
+        "Official article-type page identifies Article; identity is a mandatory package selector.",
+        "Only remains evaluable where the rule is VERIFIED; UNKNOWN rules stay manual through rule status.",
+        "Explicit hard maximum with canonical abstract scope.",
+        "Official wording is ideal rather than mandatory; scope is explicit but rule remains PARTIAL.",
+        "Official pages describe the count as a guideline, not a hard maximum.",
+        "Maximum depends on word count and the current rule does not encode the conditional tiers.",
+        "Discussion and Methods are explicitly qualified as if appropriate.",
+        "Required submission component, evaluated only when canonical submission metadata is present.",
+        "Optional permission is not an existence requirement; current EXISTS representation is not executable.",
+        "Current evidence and initial-submission alternatives do not establish unconditional applicability.",
+        "Current profile evidence does not establish a complete journal/article applicability condition.",
+        "Current profile evidence does not establish applicability; not promoted to CONDITIONAL without evidence.",
+        "Current evidence is insufficient."
+      ],
+      "migration_id": "m2.5-m3.1-semantic-2026-09-29",
+      "new_schema_version": "2.1.0",
+      "new_version": "1.1.0",
+      "old_schema_version": "2.0.0",
+      "old_version": "1.0.0",
+      "profile_id": "article-type:nature-communications/article",
+      "rules_changed": [
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "METADATA_ARTICLE_TYPE",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Official article-type page identifies Article; identity is a mandatory package selector.",
+          "rule_id": "identity.article_type",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "TITLE_TEXT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Only remains evaluable where the rule is VERIFIED; UNKNOWN rules stay manual through rule status.",
+          "rule_id": "title.max_words",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "ABSTRACT_TEXT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Explicit hard maximum with canonical abstract scope.",
+          "rule_id": "abstract.max_words",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": false,
+            "evaluation_scope": "MAIN_BODY_EXCLUDING_ABSTRACT_METHODS_REFERENCES_FIGURE_LEGENDS_TABLES_SUPPLEMENT",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Official wording is ideal rather than mandatory; scope is explicit but rule remains PARTIAL.",
+          "rule_id": "main_text.max_words",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": false,
+            "evaluation_scope": "REFERENCE_OBJECTS",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Official pages describe the count as a guideline, not a hard maximum.",
+          "rule_id": "references.max_count",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": false,
+            "evaluation_scope": "FIGURE_AND_TABLE_OBJECTS",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Maximum depends on word count and the current rule does not encode the conditional tiers.",
+          "rule_id": "display_items.max_count",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "CONDITIONAL",
+            "critical_for_readiness": false,
+            "evaluation_scope": "CANONICAL_SECTION_TYPES_AND_ORDER",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Discussion and Methods are explicitly qualified as if appropriate.",
+          "rule_id": "sections.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "METADATA_COVER_LETTER_PRESENT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Required submission component, evaluated only when canonical submission metadata is present.",
+          "rule_id": "cover_letter.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": false,
+            "evaluation_scope": "SUPPLEMENTARY_OBJECTS",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Optional permission is not an existence requirement; current EXISTS representation is not executable.",
+          "rule_id": "supplement.allowed",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "SUBMISSION_FILE_INVENTORY",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Current evidence and initial-submission alternatives do not establish unconditional applicability.",
+          "rule_id": "figures.separate_files",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "STATEMENT_CODE_AVAILABILITY",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current profile evidence does not establish a complete journal/article applicability condition.",
+          "rule_id": "statements.code_availability.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "STATEMENT_ETHICS_CONSENT",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current profile evidence does not establish applicability; not promoted to CONDITIONAL without evidence.",
+          "rule_id": "statements.ethics_consent.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "SUBMISSION_TITLE_PAGE",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current evidence is insufficient.",
+          "rule_id": "title_page.requirements",
+          "status_changed": false
+        }
+      ],
+      "schema_version": "1.0.0"
+    },
+    {
+      "evidence_changes": [],
+      "fields_added": [
+        "applicability_mode",
+        "critical_for_readiness",
+        "evaluation_scope"
+      ],
+      "manual_decisions": [],
+      "migration_id": "m2.5-m3.1-semantic-2026-09-29",
+      "new_schema_version": "2.1.0",
+      "new_version": "1.1.0",
+      "old_schema_version": "2.0.0",
+      "old_version": "1.0.0",
+      "profile_id": "journal:nature-communications",
+      "rules_changed": [],
+      "schema_version": "1.0.0"
+    },
+    {
+      "evidence_changes": [],
+      "fields_added": [
+        "applicability_mode",
+        "critical_for_readiness",
+        "evaluation_scope"
+      ],
+      "manual_decisions": [
+        "Official article-type page identifies Article; identity is a mandatory package selector.",
+        "Explicit hard maximum with canonical abstract scope.",
+        "Explicit source exclusions; PARTIAL Nature Communications rule remains non-evaluable by override below.",
+        "Official pages describe the count as a guideline, not a hard maximum.",
+        "Hard maximum where VERIFIED; qualified Nature Communications rule is disabled below.",
+        "Required structure is official, but unheaded Introduction and conditional sections make current deterministic selector incomplete.",
+        "Required submission component, evaluated only when canonical submission metadata is present.",
+        "Optional permission is not an existence requirement; current EXISTS representation is not executable.",
+        "Official maximum applies only when Extended Data are used; canonical model lacks a distinct deterministic collection.",
+        "Only remains evaluable where the rule is VERIFIED; UNKNOWN rules stay manual through rule status.",
+        "Current profile evidence does not establish a complete journal/article applicability condition.",
+        "Current profile evidence does not establish applicability; not promoted to CONDITIONAL without evidence.",
+        "Current evidence is insufficient.",
+        "Current evidence and initial-submission alternatives do not establish unconditional applicability."
+      ],
+      "migration_id": "m2.5-m3.1-semantic-2026-09-29",
+      "new_schema_version": "2.1.0",
+      "new_version": "1.1.0",
+      "old_schema_version": "2.0.0",
+      "old_version": "1.0.0",
+      "profile_id": "article-type:nature-computational-science/article",
+      "rules_changed": [
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "METADATA_ARTICLE_TYPE",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Official article-type page identifies Article; identity is a mandatory package selector.",
+          "rule_id": "identity.article_type",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "ABSTRACT_TEXT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Explicit hard maximum with canonical abstract scope.",
+          "rule_id": "abstract.max_words",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "MAIN_BODY_EXCLUDING_ABSTRACT_METHODS_REFERENCES_FIGURE_LEGENDS_TABLES_SUPPLEMENT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Explicit source exclusions; PARTIAL Nature Communications rule remains non-evaluable by override below.",
+          "rule_id": "main_text.max_words",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": false,
+            "evaluation_scope": "REFERENCE_OBJECTS",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Official pages describe the count as a guideline, not a hard maximum.",
+          "rule_id": "references.max_count",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "FIGURE_AND_TABLE_OBJECTS",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Hard maximum where VERIFIED; qualified Nature Communications rule is disabled below.",
+          "rule_id": "display_items.max_count",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "CANONICAL_SECTION_TYPES_AND_ORDER",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Required structure is official, but unheaded Introduction and conditional sections make current deterministic selector incomplete.",
+          "rule_id": "sections.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "METADATA_COVER_LETTER_PRESENT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Required submission component, evaluated only when canonical submission metadata is present.",
+          "rule_id": "cover_letter.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": false,
+            "evaluation_scope": "SUPPLEMENTARY_OBJECTS",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Optional permission is not an existence requirement; current EXISTS representation is not executable.",
+          "rule_id": "supplement.allowed",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "CONDITIONAL",
+            "critical_for_readiness": true,
+            "evaluation_scope": "EXTENDED_DATA_OBJECTS",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Official maximum applies only when Extended Data are used; canonical model lacks a distinct deterministic collection.",
+          "rule_id": "extended_data.max_count",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "TITLE_TEXT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Only remains evaluable where the rule is VERIFIED; UNKNOWN rules stay manual through rule status.",
+          "rule_id": "title.max_words",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "STATEMENT_CODE_AVAILABILITY",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current profile evidence does not establish a complete journal/article applicability condition.",
+          "rule_id": "statements.code_availability.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "STATEMENT_ETHICS_CONSENT",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current profile evidence does not establish applicability; not promoted to CONDITIONAL without evidence.",
+          "rule_id": "statements.ethics_consent.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "SUBMISSION_TITLE_PAGE",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current evidence is insufficient.",
+          "rule_id": "title_page.requirements",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "SUBMISSION_FILE_INVENTORY",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current evidence and initial-submission alternatives do not establish unconditional applicability.",
+          "rule_id": "figures.separate_files",
+          "status_changed": false
+        }
+      ],
+      "schema_version": "1.0.0"
+    },
+    {
+      "evidence_changes": [],
+      "fields_added": [
+        "applicability_mode",
+        "critical_for_readiness",
+        "evaluation_scope"
+      ],
+      "manual_decisions": [],
+      "migration_id": "m2.5-m3.1-semantic-2026-09-29",
+      "new_schema_version": "2.1.0",
+      "new_version": "1.1.0",
+      "old_schema_version": "2.0.0",
+      "old_version": "1.0.0",
+      "profile_id": "journal:nature-computational-science",
+      "rules_changed": [],
+      "schema_version": "1.0.0"
+    },
+    {
+      "evidence_changes": [],
+      "fields_added": [
+        "applicability_mode",
+        "critical_for_readiness",
+        "evaluation_scope"
+      ],
+      "manual_decisions": [
+        "Official article-type page identifies Article; identity is a mandatory package selector.",
+        "Explicit hard maximum with canonical abstract scope.",
+        "Explicit source exclusions; PARTIAL Nature Communications rule remains non-evaluable by override below.",
+        "Official pages describe the count as a guideline, not a hard maximum.",
+        "Hard maximum where VERIFIED; qualified Nature Communications rule is disabled below.",
+        "Required structure is official, but unheaded Introduction and conditional sections make current deterministic selector incomplete.",
+        "Required submission component, evaluated only when canonical submission metadata is present.",
+        "Optional permission is not an existence requirement; current EXISTS representation is not executable.",
+        "Official maximum applies only when Extended Data are used; canonical model lacks a distinct deterministic collection.",
+        "Only remains evaluable where the rule is VERIFIED; UNKNOWN rules stay manual through rule status.",
+        "Current profile evidence does not establish a complete journal/article applicability condition.",
+        "Current profile evidence does not establish applicability; not promoted to CONDITIONAL without evidence.",
+        "Current evidence is insufficient.",
+        "Current evidence and initial-submission alternatives do not establish unconditional applicability."
+      ],
+      "migration_id": "m2.5-m3.1-semantic-2026-09-29",
+      "new_schema_version": "2.1.0",
+      "new_version": "1.1.0",
+      "old_schema_version": "2.0.0",
+      "old_version": "1.0.0",
+      "profile_id": "article-type:nature-machine-intelligence/article",
+      "rules_changed": [
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "METADATA_ARTICLE_TYPE",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Official article-type page identifies Article; identity is a mandatory package selector.",
+          "rule_id": "identity.article_type",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "ABSTRACT_TEXT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Explicit hard maximum with canonical abstract scope.",
+          "rule_id": "abstract.max_words",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "MAIN_BODY_EXCLUDING_ABSTRACT_METHODS_REFERENCES_FIGURE_LEGENDS_TABLES_SUPPLEMENT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Explicit source exclusions; PARTIAL Nature Communications rule remains non-evaluable by override below.",
+          "rule_id": "main_text.max_words",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": false,
+            "evaluation_scope": "REFERENCE_OBJECTS",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Official pages describe the count as a guideline, not a hard maximum.",
+          "rule_id": "references.max_count",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "FIGURE_AND_TABLE_OBJECTS",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Hard maximum where VERIFIED; qualified Nature Communications rule is disabled below.",
+          "rule_id": "display_items.max_count",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "CANONICAL_SECTION_TYPES_AND_ORDER",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Required structure is official, but unheaded Introduction and conditional sections make current deterministic selector incomplete.",
+          "rule_id": "sections.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "METADATA_COVER_LETTER_PRESENT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Required submission component, evaluated only when canonical submission metadata is present.",
+          "rule_id": "cover_letter.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": false,
+            "evaluation_scope": "SUPPLEMENTARY_OBJECTS",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Optional permission is not an existence requirement; current EXISTS representation is not executable.",
+          "rule_id": "supplement.allowed",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "CONDITIONAL",
+            "critical_for_readiness": true,
+            "evaluation_scope": "EXTENDED_DATA_OBJECTS",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Official maximum applies only when Extended Data are used; canonical model lacks a distinct deterministic collection.",
+          "rule_id": "extended_data.max_count",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "TITLE_TEXT",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Only remains evaluable where the rule is VERIFIED; UNKNOWN rules stay manual through rule status.",
+          "rule_id": "title.max_words",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "STATEMENT_CODE_AVAILABILITY",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current profile evidence does not establish a complete journal/article applicability condition.",
+          "rule_id": "statements.code_availability.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "STATEMENT_ETHICS_CONSENT",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current profile evidence does not establish applicability; not promoted to CONDITIONAL without evidence.",
+          "rule_id": "statements.ethics_consent.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "SUBMISSION_TITLE_PAGE",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current evidence is insufficient.",
+          "rule_id": "title_page.requirements",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "UNKNOWN",
+            "critical_for_readiness": false,
+            "evaluation_scope": "SUBMISSION_FILE_INVENTORY",
+            "machine_checkable": false
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": false
+          },
+          "journalport_policy_decision": "Current evidence and initial-submission alternatives do not establish unconditional applicability.",
+          "rule_id": "figures.separate_files",
+          "status_changed": false
+        }
+      ],
+      "schema_version": "1.0.0"
+    },
+    {
+      "evidence_changes": [],
+      "fields_added": [
+        "applicability_mode",
+        "critical_for_readiness",
+        "evaluation_scope"
+      ],
+      "manual_decisions": [],
+      "migration_id": "m2.5-m3.1-semantic-2026-09-29",
+      "new_schema_version": "2.1.0",
+      "new_version": "1.1.0",
+      "old_schema_version": "2.0.0",
+      "old_version": "1.0.0",
+      "profile_id": "journal:nature-machine-intelligence",
+      "rules_changed": [],
+      "schema_version": "1.0.0"
+    },
+    {
+      "evidence_changes": [],
+      "fields_added": [
+        "applicability_mode",
+        "critical_for_readiness",
+        "evaluation_scope"
+      ],
+      "manual_decisions": [
+        "Publisher-wide required declaration.",
+        "Publisher-wide original-research declaration.",
+        "Publisher-wide required declaration."
+      ],
+      "migration_id": "m2.5-m3.1-semantic-2026-09-29",
+      "new_schema_version": "2.1.0",
+      "new_version": "1.1.0",
+      "old_schema_version": "2.0.0",
+      "old_version": "1.0.0",
+      "profile_id": "publisher:nature-portfolio",
+      "rules_changed": [
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "STATEMENT_COMPETING_INTERESTS",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Publisher-wide required declaration.",
+          "rule_id": "statements.competing_interests.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "STATEMENT_DATA_AVAILABILITY",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Publisher-wide original-research declaration.",
+          "rule_id": "statements.data_availability.required",
+          "status_changed": false
+        },
+        {
+          "evidence_changed": false,
+          "fields_after": {
+            "applicability_mode": "ALWAYS",
+            "critical_for_readiness": true,
+            "evaluation_scope": "STATEMENT_AUTHOR_CONTRIBUTIONS",
+            "machine_checkable": true
+          },
+          "fields_before": {
+            "applicability_mode": "<absent>",
+            "critical_for_readiness": "<absent>",
+            "evaluation_scope": "<absent>",
+            "machine_checkable": true
+          },
+          "journalport_policy_decision": "Publisher-wide required declaration.",
+          "rule_id": "statements.author_contributions.required",
+          "status_changed": false
+        }
+      ],
+      "schema_version": "1.0.0"
+    }
+  ],
+  "schema_version": "1.0.0"
+}

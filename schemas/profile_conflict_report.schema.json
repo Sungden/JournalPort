@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/profile_conflict_report.schema.json",
+  "title": "JournalPort ProfileConflictReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "conflicts"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"}, "status": {"enum": ["CLEAR", "CONFLICTED"]},
+    "conflicts": {"type": "array", "items": {"type": "object", "required": ["rule_id", "candidate_values", "source_evidence", "source_dates", "precedence", "impact", "resolution_status"]}}
+  }
+}
