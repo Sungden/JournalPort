@@ -61,6 +61,7 @@ path = "src/journalport/_version.py"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+pythonpath = ["."]
 
 [tool.ruff]
 target-version = "py311"
