@@ -2,7 +2,7 @@
 
 - [x] Version frozen from one package source
 - [x] Full local tests and quality gates pass
-- [ ] Hosted CI passes
+- [x] Hosted CI passes on Python 3.11–3.13
 - [x] License/evidence redistribution audit completed
 - [ ] Citation author form, optional public email/ORCID, and repository URL approved
 - [x] README and documentation current
