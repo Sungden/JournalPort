@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: JournalPort
+message: "Citation metadata is provisional until the first public release."
+type: software
+authors:
+  - name: Sungden
+version: 0.1.0rc1
+license: Apache-2.0
+abstract: "Provenance-aware, verifiable, content-preserving journal transfer infrastructure."
+
