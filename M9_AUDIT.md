@@ -51,7 +51,7 @@ operation.
 
 Skills are source-repository/sdist assets (ADR-025). Curated profiles are pinned wheel data with no
 automatic update (ADR-026). `journal_profiles/registry.yaml` version 1.0.0 records all three current
-Article root profiles, versions, PARTIAL status, dates, and verified SHA-256 hashes.
+Article root profiles, versions, PARTIAL status, dates, and verified canonical JSON SHA-256 hashes.
 
 ## Benchmark reproducibility
 

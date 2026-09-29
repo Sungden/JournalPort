@@ -1,9 +1,10 @@
 {
   "registry_version": "1.0.0",
   "journalport_compatibility": ">=0.1.0rc1,<0.2",
+  "hash_algorithm": "sha256-canonical-json-v1",
   "profiles": [
-    {"profile_id": "article-type:nature-communications/article", "version": "1.1.0", "status": "PARTIAL", "last_verified": "2026-09-29", "sha256": "6eddfe5f5d2c8ab67f113a98a0941660f4532d4297d8edc290ac34bda17efe5a"},
-    {"profile_id": "article-type:nature-computational-science/article", "version": "1.1.0", "status": "PARTIAL", "last_verified": "2026-09-29", "sha256": "2ddb4c43ea498bde336e245387d20f22e41b39b04ac7a46422ef9b6f5f533ae5"},
-    {"profile_id": "article-type:nature-machine-intelligence/article", "version": "1.1.0", "status": "PARTIAL", "last_verified": "2026-09-29", "sha256": "471ab2ebdccd8e3b50702646a38931e9e1608c1e13497afa1bb7d0b9682e7d34"}
+    {"profile_id": "article-type:nature-communications/article", "version": "1.1.0", "status": "PARTIAL", "last_verified": "2026-09-29", "sha256": "a5b0eb6f0f238f028291c6b3b5d85e280d34ffeb2188e5129adc7f4cd3249d8e"},
+    {"profile_id": "article-type:nature-computational-science/article", "version": "1.1.0", "status": "PARTIAL", "last_verified": "2026-09-29", "sha256": "e57eb67e42d28a0116ce4436309c93852b2cba8b9df4dea1584d92c4c200ad95"},
+    {"profile_id": "article-type:nature-machine-intelligence/article", "version": "1.1.0", "status": "PARTIAL", "last_verified": "2026-09-29", "sha256": "0ef91c523db6e8ff2b777bb991957a1a7c93497095c59c015c46a61ca26492a2"}
   ]
 }

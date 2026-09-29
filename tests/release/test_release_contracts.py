@@ -75,11 +75,16 @@ def test_cli_version_help_and_benchmark_contract(tmp_path: Path) -> None:
 def test_profile_registry_hashes_and_statuses() -> None:
     registry = json.loads((ROOT / "journal_profiles/registry.yaml").read_text(encoding="utf-8"))
     assert registry["registry_version"] == "1.0.0"
+    assert registry["hash_algorithm"] == "sha256-canonical-json-v1"
     assert len(registry["profiles"]) == 3
     for item in registry["profiles"]:
         slug = item["profile_id"].removeprefix("article-type:").removesuffix("/article")
         path = ROOT / "journal_profiles/journals" / slug / f"article-{item['version']}.json"
-        assert hashlib.sha256(path.read_bytes()).hexdigest() == item["sha256"]
+        profile = json.loads(path.read_text(encoding="utf-8"))
+        canonical = json.dumps(
+            profile, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        ).encode("utf-8")
+        assert hashlib.sha256(canonical).hexdigest() == item["sha256"]
         assert item["status"] == "PARTIAL"
 
 
