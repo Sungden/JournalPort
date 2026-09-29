@@ -81,6 +81,16 @@ was not changed. The repository began with no commits. M9 creates logical review
 core/profile foundation, guideline/Skill workflows, and rc stabilization. Final commit hashes and
 clean-tree status are appended after commit creation. No history rewrite, tag, remote, or push occurs.
 
+Reviewed history:
+
+- `d5271d0b7eb8cc4d19ea620fd5a873b2536342b0` — deterministic core, schemas, profiles, tests.
+- `7de335bd24ea4a8ea2ef19b2eaafe5b8a5764d8a` — guideline extraction and reusable Skills.
+- `670999e54f228b30be739c79919ba0ad0f7e7878` — submission-package distribution correction.
+- `14f01473a8969186f377cd69253461376aba3ee4` — rc1 documentation, metadata, CI, and audits.
+
+`git fsck --full --no-dangling` passed. A final audit-record commit adds this immutable provenance
+listing; its hash is reported in the final M9 response because a commit cannot contain its own hash.
+
 ## Readiness and remaining blockers
 
 Release Candidate Readiness: **READY**.
