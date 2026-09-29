@@ -13,7 +13,7 @@ from .model import CanonicalManuscript
 
 
 def canonicalize(value: Any) -> Any:
-    if is_dataclass(value):
+    if is_dataclass(value) and not isinstance(value, type):
         value = asdict(value)
     if isinstance(value, dict):
         return {
