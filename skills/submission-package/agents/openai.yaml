@@ -1,0 +1,4 @@
+interface:
+  display_name: Submission Package
+  short_description: Build a verified package from author-supplied artifacts
+  default_prompt: Build and verify a submission package without inventing missing author materials.
