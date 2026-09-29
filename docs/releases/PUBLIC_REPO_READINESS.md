@@ -10,7 +10,7 @@ parse→audit→plan→apply→verify→package workflow pass.
 
 README, API/CLI contracts, architecture/ADR index, profiles/Skills contribution guides, examples,
 privacy/threat model, release procedure, release notes, and checklist are present. Historical audits
-remain at the root for rc1; migration to `docs/audits/` is intentionally deferred.
+are retained under `docs/audits/` to keep the repository root user-focused.
 
 ## Packaging and testing readiness
 
@@ -36,8 +36,8 @@ with `journalport benchmark guideline-extraction` and retains its narrow-scope d
 
 Repository-local commit identity is configured as user-supplied `Sungden` identity; its email is
 intentionally omitted from public documentation.
-Reviewed logical initial commits and their history are recorded in `M9_AUDIT.md`; hosting evidence
-is recorded in `M9_5_HOSTING_AUDIT.md`. The reviewed history is pushed to the canonical remote and
+Reviewed logical initial commits and their history are recorded in `../audits/M9_AUDIT.md`;
+hosting evidence is recorded in `../audits/M9_5_HOSTING_AUDIT.md`. The reviewed history is pushed to the canonical remote and
 hosted CI passes. No tag, GitHub Release, PyPI upload, or Zenodo action was performed.
 
 Canonical hosting is <https://github.com/Sungden/JournalPort>. Remaining user-controlled gates are

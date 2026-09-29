@@ -110,7 +110,8 @@ because it is optional and no configured provider is required for M8.
 
 ## Public repository readiness and Git provenance
 
-Engineering readiness is **READY WITH CONDITIONS**; see `PUBLIC_REPO_READINESS.md`. README,
+Engineering readiness is **READY WITH CONDITIONS**; see
+`../releases/PUBLIC_REPO_READINESS.md`. README,
 examples, installation, CI workflow, package metadata, and safety claims now match tested scope.
 `CITATION.cff` no longer invents a repository URL or release date.
 

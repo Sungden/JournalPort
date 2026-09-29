@@ -25,16 +25,30 @@ Official Guidelines → Journal Profiles → Manuscript Parsing → Compliance A
 
 Requires Python 3.11 or newer.
 
+Install the public release candidate directly from its verified GitHub release asset:
+
 ```bash
-python -m pip install .
-journalport audit tests/fixtures/latex/basic_article/main.tex \
+python -m pip install https://github.com/Sungden/JournalPort/releases/download/v0.1.0rc1/journalport-0.1.0rc1-py3-none-any.whl
+journalport --version
+journalport --help
+```
+
+Expected version output is `journalport 0.1.0rc1`. JournalPort is not yet published on PyPI, so
+`pip install journalport` is not currently supported.
+
+For the complete source checkout, bundled examples, and Agent Skills:
+
+```bash
+git clone https://github.com/Sungden/JournalPort.git
+cd JournalPort
+python -m pip install -e .
+journalport audit examples/quickstart/article.tex \
   --journal nature-communications --output audit-result
 ```
 
-Inspect `audit-result/compliance_report.json`. JournalPort is not yet on PyPI; `pip install
-journalport` is a future release command. Declared compatibility is Python 3.11+. Local rc1
-validation used Python 3.14; the prepared 3.11–3.13 CI matrix is not claimed as passing until it
-runs on hosted CI.
+Inspect `audit-result/compliance_report.json`. The public rc1 GitHub Actions matrix passes on Python
+3.11, 3.12, and 3.13. The deterministic CLI/core and bundled profiles are included in the wheel;
+the four Agent Skills are distributed in the source repository and source archive, not the wheel.
 
 See [Agent Skills](docs/SKILLS.md), [architecture](ARCHITECTURE.md), and the reproducible
 [examples](examples/skills). The deterministic core works without a model provider; the empty
@@ -63,7 +77,8 @@ compliance.
 
 On the M7 three-journal curated extraction benchmark: precision **100%**, recall **90.48%**, and
 hallucinated-requirement rate **0%**. These numbers describe only that fixed benchmark and do not
-generalize to all journals or live-provider behavior. See [M7_AUDIT.md](M7_AUDIT.md).
+generalize to all journals or live-provider behavior. See the
+[M7 benchmark audit](docs/audits/M7_AUDIT.md).
 
 ## Development and citation
 
@@ -71,4 +86,8 @@ Install with `python -m pip install -e ".[dev]"`, then run `pytest`, `ruff check
 `ruff format --check .`, and `mypy`. Citation metadata is in [CITATION.cff](CITATION.cff); no DOI
 exists yet. Apache-2.0 covers original code and documentation; third-party journal material may
 have separate terms; see [third-party notices](THIRD_PARTY_NOTICES.md).
+
+The current public release is
+[JournalPort 0.1.0rc1](https://github.com/Sungden/JournalPort/releases/tag/v0.1.0rc1). Historical
+engineering and release evidence is retained under [`docs/audits/`](docs/audits/).
 

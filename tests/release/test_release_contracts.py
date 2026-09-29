@@ -117,7 +117,7 @@ def test_documentation_and_release_structure() -> None:
         "docs/adr/README.md",
         "docs/adr/ADR-025-skill-distribution-strategy.md",
         "docs/adr/ADR-026-profile-distribution-strategy.md",
-        "RELEASE_CHECKLIST.md",
+        "docs/releases/RELEASE_CHECKLIST.md",
         "THIRD_PARTY_NOTICES.md",
     )
     assert all((ROOT / path).is_file() for path in required)

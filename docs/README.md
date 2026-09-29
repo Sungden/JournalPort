@@ -6,7 +6,6 @@
 - Skills: `SKILLS.md`, `CONTRIBUTING_SKILLS.md`
 - Security and privacy: `SECURITY.md`, `PRIVACY.md`, `THREAT_MODEL.md`
 - Contribution: root `CONTRIBUTING.md`
-- Release: `RELEASE.md`, root `RELEASE_CHECKLIST.md`, `releases/`
+- Release: `RELEASE.md`, `releases/RELEASE_CHECKLIST.md`, `releases/`
 - Research and benchmark: `GUIDELINE_EXTRACTION.md`, `benchmark/`
-- Milestone audits: currently at repository root; move to `docs/audits/` after rc1 to avoid a risky
-  history-only relocation during stabilization.
+- Milestone and release-provenance audits: `audits/`
