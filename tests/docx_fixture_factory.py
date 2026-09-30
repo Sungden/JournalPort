@@ -11,12 +11,21 @@ A = "http://schemas.openxmlformats.org/drawingml/2006/main"
 R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 
 
-def _paragraph(text: str, style: str | None = None) -> str:
+def _paragraph(text: str, style: str | None = None, *, bold: bool = False) -> str:
     style_xml = f'<w:pPr><w:pStyle w:val="{style}"/></w:pPr>' if style else ""
-    return f"<w:p>{style_xml}<w:r><w:t>{text}</w:t></w:r></w:p>"
+    bold_xml = "<w:rPr><w:b/></w:rPr>" if bold else ""
+    return f"<w:p>{style_xml}<w:r>{bold_xml}<w:t>{text}</w:t></w:r></w:p>"
 
 
-def build_docx(path: Path, *, hazards: bool = False) -> Path:
+def build_docx(
+    path: Path,
+    *,
+    hazards: bool = False,
+    abstract_heading: str = "styled",
+    front_matter: bool = False,
+    numbered_introduction: bool = False,
+    warning_field: bool = False,
+) -> Path:
     tracked = ""
     unsupported = ""
     unknown_field = ""
@@ -29,12 +38,31 @@ def build_docx(path: Path, *, hazards: bool = False) -> Path:
         """
         unsupported = "<w:object><w:r><w:t>embedded result 99</w:t></w:r></w:object>"
         unknown_field = '<w:p><w:fldSimple w:instr="UNKNOWN"><w:r><w:instrText>UNKNOWN SCIENCE</w:instrText><w:t>7.3</w:t></w:r></w:fldSimple></w:p>'
+    elif warning_field:
+        unknown_field = "<w:p><w:r><w:instrText>REF bookmark</w:instrText><w:t>cross-reference</w:t></w:r></w:p>"
+    abstract_paragraph = {
+        "styled": _paragraph("Abstract", "Heading1"),
+        "plain": _paragraph("Abstract"),
+        "bold": _paragraph("Abstract", bold=True),
+        "ambiguous": _paragraph("This abstract describes prior work."),
+    }[abstract_heading]
+    front = (
+        _paragraph("Ada Example and Charles Example")
+        + _paragraph("Example Institute; contact@example.invalid; 30 September 2026")
+        if front_matter
+        else ""
+    )
+    introduction = _paragraph(
+        "1 Introduction" if numbered_introduction else "Results",
+        None if numbered_introduction else "Heading1",
+    )
     document = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     <w:document xmlns:w="{W}" xmlns:m="{M}" xmlns:a="{A}" xmlns:r="{R}"><w:body>
       {_paragraph("Synthetic DOCX study", "Title")}
-      {_paragraph("Abstract", "Heading1")}
+      {front}
+      {abstract_paragraph}
       {_paragraph("We summarize 6 observations.")}
-      {_paragraph("Results", "Heading1")}
+      {introduction}
       {_paragraph("We measured 42 samples; response 12.5% and p &lt; 0.01.")}
       <w:p><w:r><w:instrText>CITATION doe2025</w:instrText><w:t>[1]</w:t></w:r></w:p>
       <w:p><m:oMath><m:r><m:t>y=2x+1</m:t></m:r></m:oMath></w:p>

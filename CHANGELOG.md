@@ -4,6 +4,19 @@ All notable changes will follow Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+### Fixed
+
+- Compare unsupported DOCX content by path-independent semantic fragment identity, while retaining
+  strict detection of additions, removals, mutations, type/severity changes, and multiplicity.
+- Recognize common styled, plain, and bold Abstract headings with front matter and numbered body
+  headings without treating arbitrary body mentions as headings.
+- Report pending/manual action postconditions as not applicable instead of multiplying an unrelated
+  global preservation failure across every unexecuted action.
+
+### Changed
+
+- Prepare package version `0.1.0rc2`; no tag or release has been created.
+
 ## [0.1.0rc1] - 2026-09-29
 
 ### Added

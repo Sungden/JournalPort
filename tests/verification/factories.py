@@ -12,7 +12,7 @@ from journalport.transform.planner import create_plan
 from tests.compliance.factories import active_rule, resolved_with
 
 
-def verification_context(tmp_path: Path, *, safe: bool = True):
+def verification_context(tmp_path: Path, *, safe: bool = True, abstract_limit: int = 500):
     source_path = tmp_path / "unsafe name.tex"
     source_path.write_text(
         "\\documentclass{article}\n\\begin{document}\n\\begin{abstract}A short abstract.\\end{abstract}\n"
@@ -20,7 +20,7 @@ def verification_context(tmp_path: Path, *, safe: bool = True):
         encoding="utf-8",
     )
     manuscript = parse_latex(source_path)
-    profile = resolved_with(active_rule(value=500))
+    profile = resolved_with(active_rule(value=abstract_limit))
     before = audit_manuscript(manuscript, profile, evaluation_timestamp="2026-09-29T00:00:00+00:00")
     if safe:
         finding = replace(

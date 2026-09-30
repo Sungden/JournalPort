@@ -1,6 +1,6 @@
 # Release process
 
-JournalPort uses PEP 440 versions; the current candidate is `0.1.0rc1`. Update the single source in
+JournalPort uses PEP 440 versions; the development candidate is `0.1.0rc2`. Update the single source in
 `src/journalport/_version.py`, synchronize citation/release documents, run the release checklist,
 build both artifacts, inspect their contents, and install each into a fresh environment.
 

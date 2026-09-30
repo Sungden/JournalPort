@@ -26,7 +26,7 @@ from .models import ComplianceDelta, VerificationFinding, VerificationReport
 from .preservation import preservation_results
 from .reconciliation import reconcile
 
-VERIFICATION_VERSION = "1.0.0"
+VERIFICATION_VERSION = "1.0.1"
 
 
 class VerificationInputError(ValueError):
@@ -128,10 +128,9 @@ def verify_candidate(
         elif log.execution_status == "APPLIED":
             postconditions[action.action_id] = "FAIL"
         else:
-            # No semantic operation is implemented in M4: all scientific categories must remain equal.
-            postconditions[action.action_id] = (
-                "PASS" if all(value == "PASS" for value in preservation.values()) else "FAIL"
-            )
+            # A pending/manual action made no claim of achieving its requested semantic state.
+            # Global preservation is reported once by preservation_checks, not duplicated per action.
+            postconditions[action.action_id] = "NOT_APPLICABLE"
 
     profile_integrity = tamper_checks["profile_hash"] == "PASS"
     if profile_integrity:

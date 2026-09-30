@@ -4,7 +4,14 @@ from copy import deepcopy
 
 import pytest
 
-from journalport.manuscript.model import Asset, Citation, Equation, Reference, SourceLocator
+from journalport.manuscript.model import (
+    Asset,
+    Citation,
+    Equation,
+    Reference,
+    SourceLocator,
+    UnsupportedContent,
+)
 from journalport.verify.preservation import preservation_results
 from tests.compliance.factories import manuscript
 
@@ -54,3 +61,49 @@ def test_nonsemantic_source_locator_change_is_not_a_false_positive() -> None:
     checks, changed = preservation_results(original, candidate)
     assert not changed
     assert all(value == "PASS" for value in checks.values())
+
+
+def _unsupported(*, digest: str = "sha256:raw", severity: str = "WARNING") -> UnsupportedContent:
+    return UnsupportedContent(
+        "path-sensitive-id",
+        "DOCX_FIELD_REF",
+        _locator(),
+        "preserved field",
+        severity,
+        True,
+        True,
+        digest,
+        "REF bookmark",
+    )
+
+
+def test_unsupported_content_uses_path_independent_multiset_identity() -> None:
+    original = _rich_manuscript()
+    original.unsupported_content = [_unsupported(), _unsupported(digest="sha256:second")]
+    candidate = deepcopy(original)
+    candidate.unsupported_content[0].object_id = "different-candidate-id"
+    candidate.unsupported_content[0].source_locator.source_file = "renamed.docx"
+    candidate.unsupported_content.reverse()
+    checks, changed = preservation_results(original, candidate)
+    assert checks["unsupported_content"] == "PASS"
+    assert "unsupported_content" not in changed
+
+
+@pytest.mark.parametrize("mutation", ("add", "delete", "fragment", "severity", "type"))
+def test_unsupported_content_real_mutations_fail(mutation: str) -> None:
+    original = _rich_manuscript()
+    original.unsupported_content = [_unsupported()]
+    candidate = deepcopy(original)
+    if mutation == "add":
+        candidate.unsupported_content.append(_unsupported(digest="sha256:added"))
+    elif mutation == "delete":
+        candidate.unsupported_content.clear()
+    elif mutation == "fragment":
+        candidate.unsupported_content[0].source_fragment_hash = "sha256:modified"
+    elif mutation == "severity":
+        candidate.unsupported_content[0].severity = "BLOCKING"
+    else:
+        candidate.unsupported_content[0].object_type = "TEXT_BOX"
+    checks, changed = preservation_results(original, candidate)
+    assert checks["unsupported_content"] == "FAIL"
+    assert "unsupported_content" in changed

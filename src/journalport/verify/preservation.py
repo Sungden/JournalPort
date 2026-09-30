@@ -41,16 +41,19 @@ def scientific_snapshot(manuscript: CanonicalManuscript) -> dict[str, Any]:
         "footnotes": [(item.object_id, item.text) for item in manuscript.footnotes],
         "endnotes": [(item.object_id, item.text) for item in manuscript.endnotes],
         "author_metadata": manuscript.metadata.get("authors", []),
-        "unsupported_content": [
+        # Unsupported fragments are an order-insensitive multiset. Object IDs and source
+        # locators are deliberately excluded because they may include the isolated filename.
+        # Counter multiplicity still detects additions and removals.
+        "unsupported_content": Counter(
             (
-                item.object_id,
                 item.object_type,
                 item.severity,
                 item.source_fragment_hash,
                 item.raw_fragment_preserved,
+                item.preservation_possible,
             )
             for item in manuscript.unsupported_content
-        ],
+        ),
         "text_multiset": Counter(manuscript_texts(manuscript)),
     }
 

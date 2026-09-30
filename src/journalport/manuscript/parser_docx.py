@@ -107,6 +107,40 @@ def _style(paragraph: ET.Element) -> str:
     return "" if node is None else node.get(W + "val", "")
 
 
+def _all_text_runs_bold(paragraph: ET.Element) -> bool:
+    """Return true only when every non-empty text run is explicitly bold."""
+    runs = [run for run in paragraph.findall("./w:r", NS) if _text(run).strip()]
+    if not runs:
+        return False
+    for run in runs:
+        bold = run.find("./w:rPr/w:b", NS)
+        if bold is None or bold.get(W + "val", "true").casefold() in {"0", "false", "off"}:
+            return False
+    return True
+
+
+def _plain_heading(
+    value: str, paragraph: ET.Element, before_body_sections: bool
+) -> tuple[int, str] | None:
+    """Recognize conservative common headings when Word styles are absent."""
+    if value.casefold() == "abstract" and before_body_sections:
+        return 1, "Abstract"
+    numbered = re.fullmatch(r"([1-9]\d*)(?:\.([1-9]\d*))?[.)]?\s+(.+)", value)
+    if numbered:
+        return (2 if numbered.group(2) else 1), value
+    if _all_text_runs_bold(paragraph) and value.casefold() in {
+        "abstract",
+        "introduction",
+        "methods",
+        "results",
+        "discussion",
+        "references",
+        "bibliography",
+    }:
+        return 1, value
+    return None
+
+
 def _relationships(archive: zipfile.ZipFile, limits: DocxResourceLimits) -> dict[str, str]:
     name = "word/_rels/document.xml.rels"
     if name not in archive.namelist():
@@ -225,8 +259,14 @@ def parse_docx(
                 if style.lower() in {"title", "articletitle"} and value:
                     manuscript.metadata["title"] = value
                     continue
-                if heading_match:
-                    level = int(heading_match.group(1))
+                only_front_matter = not manuscript.main_body or all(
+                    not section.title for section in manuscript.main_body
+                )
+                inferred_heading = _plain_heading(value, element, only_front_matter)
+                if heading_match or inferred_heading:
+                    level = (
+                        int(heading_match.group(1)) if heading_match else inferred_heading[0]  # type: ignore[index]
+                    )
                     section = Section(
                         ids.make(
                             "section" if level == 1 else "subsection",
@@ -240,6 +280,7 @@ def parse_docx(
                     while section_stack and section_stack[-1].level >= level:
                         section_stack.pop()
                     if value.casefold() == "abstract" and level == 1:
+                        section_stack.clear()
                         manuscript.abstract.append(section)
                     elif section_stack:
                         section_stack[-1].subsections.append(section)
