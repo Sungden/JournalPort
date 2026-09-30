@@ -18,6 +18,11 @@ submission/
 /journalport-package/
 /package-plan/
 /submission-package/
+/.journalport-runtime/
+/private-manuscripts/
+/confidential-manuscripts/
+*.approved-payload.txt
+*.private.docx
 *.whl
 *.tar.gz
 

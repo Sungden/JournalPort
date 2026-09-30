@@ -31,5 +31,5 @@ def test_approval_is_bound_to_action_plan_and_proposal(tmp_path) -> None:
     result = execute_plan(
         plan, manuscript, profile, report, tmp_path / "candidate", approvals=(approval,)
     )
-    assert result.logs[0].execution_status == "MANUAL_ACTION_REQUIRED"
+    assert result.logs[0].execution_status == "BLOCKED_APPROVAL"
     assert not result.manifest.applied_action_ids

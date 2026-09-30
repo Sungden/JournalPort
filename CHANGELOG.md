@@ -4,6 +4,14 @@ All notable changes will follow Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Add the confidential local DOCX transformation executor with payload-bound approvals, surgical
+  abstract replacement, administrative-section insertion/heading normalization, atomic output,
+  authorized-delta verification, and an offline CLI approval workflow.
+- Add a confidential-manuscript threat model and network-disabled, log-redaction, source-preservation,
+  cleanup, independent-verification, and package-pipeline regression coverage.
+
 ### Fixed
 
 - Compare unsupported DOCX content by path-independent semantic fragment identity, while retaining
@@ -24,7 +32,9 @@ All notable changes will follow Keep a Changelog and semantic versioning.
 
 ### Changed
 
-- Prepare package version `0.1.0rc2`; no tag or release has been created.
+- Evaluate target article type from resolved submission context and cover-letter presence at the
+  package artifact layer instead of requiring visible manuscript metadata.
+- Prepare package version `0.1.0rc3`; no tag or release has been created.
 
 ## [0.1.0rc1] - 2026-09-29
 

@@ -55,6 +55,17 @@ class DocxResourceLimits:
 
 
 DEFAULT_LIMITS = DocxResourceLimits()
+ADMIN_SECTION_ALIASES = {
+    "author contributions": "author_contributions",
+    "author contribution statement": "author_contributions",
+    "competing interests": "competing_interests",
+    "conflict of interest": "competing_interests",
+    "conflicts of interest": "competing_interests",
+    "data availability": "data_availability",
+    "availability of data": "data_availability",
+    "code availability": "code_availability",
+    "availability of code": "code_availability",
+}
 
 
 def _sha256(data: bytes) -> str:
@@ -253,6 +264,15 @@ def _plain_heading(
         "discussion",
         "references",
         "bibliography",
+        "author contributions",
+        "author contribution statement",
+        "competing interests",
+        "conflict of interest",
+        "conflicts of interest",
+        "data availability",
+        "availability of data",
+        "code availability",
+        "availability of code",
     }:
         return 1, value
     return None
@@ -775,4 +795,10 @@ def parse_docx(
                     raw_fragment=raw_comments,
                 )
             )
+        for section in manuscript.main_body:
+            key = ADMIN_SECTION_ALIASES.get(_heading_label(section.title))
+            if key is not None:
+                content = "\n".join(item.text for item in section.paragraphs).strip()
+                if content:
+                    manuscript.statements[key] = content
         return manuscript

@@ -57,6 +57,7 @@ def build_docx(
     real_world_structure: bool = False,
     custom_numbered: tuple[tuple[str, bool], ...] = (),
     abstract_after_introduction: bool = False,
+    abstract_body: str = "We summarize 6 observations.",
 ) -> Path:
     tracked = ""
     unsupported = ""
@@ -192,7 +193,7 @@ def build_docx(
       {title_paragraph}
       {front}
       {"" if abstract_after_introduction else abstract_paragraph}
-      {"" if real_world_structure else _paragraph("We summarize 6 observations.")}
+      {"" if real_world_structure else _paragraph(abstract_body)}
       {introduction}
       {abstract_paragraph if abstract_after_introduction else ""}
       {"" if real_world_structure else _paragraph("We measured 42 samples; response 12.5% and p &lt; 0.01.")}

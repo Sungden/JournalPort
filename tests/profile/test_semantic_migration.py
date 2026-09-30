@@ -66,7 +66,10 @@ def test_real_profile_verified_machine_rules_are_all_evaluated(slug: str) -> Non
         for finding in report.findings
         if finding.rule_id in verified_machine and finding.status in {"PASS", "WARNING", "BLOCKED"}
     }
-    assert evaluated == verified_machine
+    assert evaluated == verified_machine - {"cover_letter.required"}
+    cover = next(item for item in report.findings if item.rule_id == "cover_letter.required")
+    assert cover.status == "NOT_APPLICABLE"
+    assert cover.evaluation_method == "policy-gate"
     assert report.coverage.unsupported_evaluator_rules == 0
     assert report.readiness_status == "REQUIRES_MANUAL_REVIEW"
     assert Counter(finding.status for finding in report.findings)["PASS"] > 0

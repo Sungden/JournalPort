@@ -16,7 +16,7 @@ from journalport.manuscript.serialization import logical_hash
 from journalport.profiles.hashing import resolved_hash
 from journalport.profiles.models import JSONValue, ResolvedJournalProfile
 
-from .hashing import file_hash, plan_hash
+from .hashing import canonical_hash, file_hash, plan_hash
 from .models import TransformationAction, TransformationPlan
 from .registry import transformation_for
 
@@ -36,11 +36,23 @@ def _action_id(finding: ComplianceFinding, operation: str, profile_hash: str) ->
 def _action(finding: ComplianceFinding, profile_hash: str) -> TransformationAction:
     operation, classification, support = transformation_for(finding)
     automatic = classification in {"SAFE_AUTOMATIC", "CONTENT_PRESERVING_AUTOMATIC"}
-    parameters: dict[str, JSONValue] = (
-        {"output_filename": finding.expected_value}
-        if operation == "NORMALIZE_OUTPUT_FILENAME"
-        else {"proposal_available": False, "manual_revision_required": True}
-    )
+    if operation == "NORMALIZE_OUTPUT_FILENAME":
+        parameters: dict[str, JSONValue] = {"output_filename": finding.expected_value}
+    elif operation == "REPLACE_ABSTRACT":
+        parameters = {
+            "target_key": "abstract",
+            "expected_precondition_hash": canonical_hash(finding.current_value),
+            "payload_transport": "LOCAL_SIDECAR",
+        }
+    elif operation == "INSERT_REQUIRED_SECTION":
+        target_key = finding.rule_id.removeprefix("statements.").rsplit(".", 1)[0]
+        parameters = {
+            "target_key": target_key,
+            "expected_precondition_hash": canonical_hash(finding.current_value),
+            "payload_transport": "LOCAL_SIDECAR",
+        }
+    else:
+        parameters = {"proposal_available": False, "manual_revision_required": True}
     return TransformationAction(
         "1.0.0",
         _action_id(finding, operation, profile_hash),

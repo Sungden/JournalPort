@@ -40,7 +40,7 @@ def test_offline_audit_cli_writes_json_and_html(
     )
     assert result == 0
     report = json.loads((output / "compliance_report.json").read_text(encoding="utf-8"))
-    assert report["readiness_status"] == "EVALUATION_FAILED"
+    assert report["readiness_status"] == "BLOCKED"
     assert (output / "evaluation_trace.json").is_file()
     assert (output / "compliance_report.html").is_file()
     assert source.read_bytes() == original

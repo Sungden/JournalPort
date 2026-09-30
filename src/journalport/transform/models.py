@@ -104,6 +104,11 @@ class ActionLog:
     timestamp: str
     errors: tuple[str, ...]
     warnings: tuple[str, ...]
+    operation: str = ""
+    approval_reference: str | None = None
+    payload_hash: str | None = None
+    precondition_status: str = "NOT_EVALUATED"
+    postcondition_status: str = "PENDING_VERIFICATION"
 
 
 @dataclass(frozen=True, slots=True)

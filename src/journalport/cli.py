@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from dataclasses import asdict
+from datetime import UTC, datetime
 from pathlib import Path
 
 from journalport import __version__
@@ -29,9 +31,11 @@ from journalport.package.verify import verify_package
 from journalport.profiles.loader import ProfileRegistry
 from journalport.profiles.models import ResolvedJournalProfile
 from journalport.profiles.resolver import resolve_profile
+from journalport.transform.approvals import proposed_content_hash
 from journalport.transform.executor import execute_plan
 from journalport.transform.models import (
     ActionLog,
+    Approval,
     CandidateManifest,
     transformation_plan_from_dict,
 )
@@ -61,10 +65,18 @@ def _parser() -> argparse.ArgumentParser:
     plan.add_argument("--profile-version", default="1.1.0")
     plan.add_argument("--profiles", type=Path, default=_default_profiles_path())
     plan.add_argument("--output", type=Path, default=Path("journalport-plan"))
+    approve = commands.add_parser("approve", help="bind explicit approval to a local payload")
+    approve.add_argument("plan", type=Path)
+    approve.add_argument("--action", required=True)
+    approve.add_argument("--payload", type=Path, required=True)
+    approve.add_argument("--approved-by", required=True)
+    approve.add_argument("--output", type=Path, required=True)
     apply = commands.add_parser("apply", help="apply only supported safe actions")
     apply.add_argument("plan", type=Path)
     apply.add_argument("--profiles", type=Path, default=_default_profiles_path())
     apply.add_argument("--output", type=Path, required=True)
+    apply.add_argument("--approval", type=Path, action="append", default=[])
+    apply.add_argument("--payload", action="append", default=[], metavar="ACTION_ID=FILE")
     verify = commands.add_parser("verify", help="independently verify a transformed candidate")
     verify.add_argument("--source", type=Path, required=True)
     verify.add_argument("--candidate", type=Path, required=True)
@@ -207,7 +219,53 @@ def _apply(args: argparse.Namespace) -> int:
     ids = ("publisher:nature-portfolio", f"journal:{slug}", article)
     registry = ProfileRegistry.from_directory(args.profiles)
     profile = resolve_profile(registry, *ids, {item: plan.profile_version for item in ids})
-    execute_plan(plan, manuscript, profile, report, args.output)
+    approvals = tuple(
+        Approval(**json.loads(path.read_text(encoding="utf-8"))) for path in args.approval
+    )
+    payloads: dict[str, str] = {}
+    for specification in args.payload:
+        action_id, separator, filename = specification.partition("=")
+        if not separator or not action_id or not filename:
+            raise ValueError("payload must use ACTION_ID=FILE")
+        payloads[action_id] = Path(filename).read_text(encoding="utf-8")
+    execute_plan(
+        plan,
+        manuscript,
+        profile,
+        report,
+        args.output,
+        approvals=approvals,
+        payloads=payloads,
+    )
+    return 0
+
+
+def _approve(args: argparse.Namespace) -> int:
+    plan = transformation_plan_from_dict(json.loads(args.plan.read_text(encoding="utf-8")))
+    matches = [item for item in plan.actions if item.action_id == args.action]
+    if len(matches) != 1:
+        raise ValueError("approval action is missing or ambiguous")
+    action = matches[0]
+    if not action.requires_approval or action.transformation_status != "SUPPORTED":
+        raise ValueError("action is not eligible for executable approval")
+    payload = args.payload.read_text(encoding="utf-8")
+    if not payload.strip():
+        raise ValueError("approved payload is empty")
+    approval = Approval(
+        "1.0.0",
+        action.action_id,
+        plan.plan_hash,
+        proposed_content_hash(action, payload),
+        "APPROVED",
+        args.approved_by,
+        datetime.now(UTC).isoformat(),
+    )
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(
+        json.dumps(asdict(approval), ensure_ascii=False, sort_keys=True, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    os.chmod(args.output, 0o600)
     return 0
 
 
@@ -396,6 +454,8 @@ def _dispatch(args: argparse.Namespace) -> int:
         return _audit(args)
     if args.command == "plan":
         return _plan(args)
+    if args.command == "approve":
+        return _approve(args)
     if args.command == "apply":
         return _apply(args)
     if args.command == "verify":

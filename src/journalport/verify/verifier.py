@@ -19,11 +19,15 @@ from journalport.profiles.models import ResolvedJournalProfile
 from journalport.transform.hashing import canonical_hash, plan_hash
 from journalport.transform.models import ActionLog, CandidateManifest, TransformationPlan
 
-from .changes import allowed_change_set, observed_non_scientific_changes
+from .changes import (
+    allowed_change_set,
+    observed_authorized_changes,
+    observed_non_scientific_changes,
+)
 from .compliance_delta import compare_compliance
 from .hashing import artifact_hash, verification_report_hash
 from .models import ComplianceDelta, VerificationFinding, VerificationReport
-from .preservation import preservation_results
+from .preservation import authorized_preservation_results
 from .reconciliation import reconcile
 
 VERIFICATION_VERSION = "1.0.1"
@@ -107,11 +111,17 @@ def verify_candidate(
     }
     manifest_checks = reconcile(plan, logs, manifest)
 
-    preservation, scientific_changes = preservation_results(
-        original_manuscript, candidate_manuscript
+    applied_ids = tuple(item.action_id for item in logs if item.execution_status == "APPLIED")
+    allowed = allowed_change_set(plan, applied_ids)
+    preservation, scientific_changes = authorized_preservation_results(
+        original_manuscript, candidate_manuscript, allowed
     )
-    allowed = allowed_change_set(plan)
-    observed = observed_non_scientific_changes(source, candidate)
+    observed = tuple(
+        sorted(
+            set(observed_non_scientific_changes(source, candidate))
+            | set(observed_authorized_changes(original_manuscript, candidate_manuscript))
+        )
+    )
     unexpected = tuple(sorted(set(scientific_changes) | (set(observed) - set(allowed))))
 
     postconditions: dict[str, str] = {}
@@ -124,6 +134,28 @@ def verify_candidate(
             expected = action.parameters.get("output_filename")
             postconditions[action.action_id] = (
                 "PASS" if isinstance(expected, str) and candidate.name == expected else "FAIL"
+            )
+        elif log.execution_status == "APPLIED" and action.operation == "REPLACE_ABSTRACT":
+            postconditions[action.action_id] = (
+                "PASS" if "abstract" in observed and candidate_manuscript.abstract else "FAIL"
+            )
+        elif log.execution_status == "APPLIED" and action.operation == "INSERT_REQUIRED_SECTION":
+            target = action.parameters.get("target_key")
+            postconditions[action.action_id] = (
+                "PASS"
+                if isinstance(target, str) and candidate_manuscript.statements.get(target)
+                else "FAIL"
+            )
+        elif log.execution_status == "APPLIED" and action.operation == "NORMALIZE_SECTION_HEADING":
+            target = action.parameters.get("target_key")
+            postconditions[action.action_id] = (
+                "PASS" if isinstance(target, str) and f"heading:{target}" in observed else "FAIL"
+            )
+        elif log.execution_status == "APPLIED" and action.operation == "SET_MANUSCRIPT_METADATA":
+            expected = action.parameters.get("value")
+            target = profile.root_profile_id.rsplit("/", 1)[-1].replace("-", " ").title()
+            postconditions[action.action_id] = (
+                "PASS" if expected == target and expected == action.target_state else "FAIL"
             )
         elif log.execution_status == "APPLIED":
             postconditions[action.action_id] = "FAIL"

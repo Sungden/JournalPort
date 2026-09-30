@@ -45,6 +45,8 @@ def _origin(profile: ResolvedJournalProfile, rule: ProfileRule) -> str:
 
 
 def _status_before_evaluation(rule: ProfileRule) -> tuple[str, str] | None:
+    if rule.target == "cover_letter":
+        return "NOT_APPLICABLE", "submission artifact is evaluated at package layer"
     if rule.status in {"UNKNOWN", "PARTIAL", "STALE", "CONFLICTED"}:
         return "UNKNOWN", f"rule status is {rule.status}"
     if rule.status == "NOT_APPLICABLE" or rule.applicability_mode == "NOT_APPLICABLE":
@@ -117,7 +119,16 @@ def _evaluate_rule(
             "EVALUATION_ERROR",
             f"unsupported operator {rule.operator}",
         )
-    selection = select_target(manuscript, rule)
+    if rule.target == "article_type":
+        target_article_type = profile.root_profile_id.rsplit("/", 1)[-1].replace("-", " ").title()
+        selection = Selection(
+            "article_type",
+            (),
+            target_article_type,
+            "resolved_submission_context.article_type",
+        )
+    else:
+        selection = select_target(manuscript, rule)
     if selection.error:
         return _finding(rule, profile, selection, "EVALUATION_ERROR", selection.error)
     try:

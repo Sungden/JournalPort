@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_release_version_is_single_sourced_and_synchronized() -> None:
-    assert journalport.__version__ == "0.1.0rc2"
+    assert journalport.__version__ == "0.1.0rc3"
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert 'dynamic = ["version"]' in pyproject
     assert 'path = "src/journalport/_version.py"' in pyproject
@@ -49,7 +49,7 @@ def test_cli_version_help_and_benchmark_contract(tmp_path: Path) -> None:
         check=False,
     )
     assert version.returncode == 0
-    assert version.stdout.strip() == "journalport 0.1.0rc2"
+    assert version.stdout.strip() == "journalport 0.1.0rc3"
     output = tmp_path / "benchmark.json"
     result = subprocess.run(
         [
@@ -69,7 +69,7 @@ def test_cli_version_help_and_benchmark_contract(tmp_path: Path) -> None:
     assert result.returncode == 0, result.stderr
     value = json.loads(output.read_text(encoding="utf-8"))
     assert value["benchmark_version"] == "1.0.0"
-    assert value["journalport_version_verified_with"] == "0.1.0rc2"
+    assert value["journalport_version_verified_with"] == "0.1.0rc3"
 
 
 def test_profile_registry_hashes_and_statuses() -> None:
