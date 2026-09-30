@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/agent_proposal.schema.json",
+  "title": "JournalPort AgentProposal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "proposal_id", "session_id", "rule_id", "target_object_id", "operation", "original_hash", "proposed_text", "proposed_text_hash", "rationale", "source_evidence", "risk_level", "scientific_diff_flags", "requires_author_approval", "approval_status", "created_by", "created_at"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "proposal_id": {"type": "string"}, "session_id": {"type": "string"}, "rule_id": {"type": "string"}, "target_object_id": {"type": "string"}, "operation": {"type": "string"},
+    "original_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "proposed_text": {"type": "string"},
+    "proposed_text_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "rationale": {"type": "string"},
+    "source_evidence": {"type": "array", "items": {"type": "string"}},
+    "risk_level": {"enum": ["LOW", "MEDIUM", "HIGH", "PROHIBITED"]},
+    "scientific_diff_flags": {"type": "array", "items": {"type": "string"}},
+    "requires_author_approval": {"const": true},
+    "approval_status": {"enum": ["PENDING", "APPROVED", "REJECTED"]},
+    "created_by": {"type": "string"}, "created_at": {"type": "string", "format": "date-time"}
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/transfer_session.schema.json",
+  "title": "JournalPort TransferSession",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "session_id", "created_at", "source_manuscript_path", "source_manuscript_hash", "source_journal", "target_journal", "article_type", "privacy_mode", "profile_version", "compliance_report_path", "transformation_plan_path", "agent_proposals", "author_inputs", "approvals", "execution_result", "verification_result", "package_result", "disclosure_ledger_path", "status"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "session_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "source_manuscript_path": {"type": "string"},
+    "source_manuscript_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "source_journal": {"type": ["string", "null"]},
+    "target_journal": {"type": "string", "minLength": 1},
+    "article_type": {"type": "string", "minLength": 1},
+    "privacy_mode": {"enum": ["LOCAL_ONLY", "CODEX_HOSTED", "REMOTE_AGENT"]},
+    "profile_version": {"type": "string"},
+    "compliance_report_path": {"type": ["string", "null"]},
+    "transformation_plan_path": {"type": ["string", "null"]},
+    "agent_proposals": {"type": "array", "items": {"type": "string"}},
+    "author_inputs": {"type": "array", "items": {"type": "string"}},
+    "approvals": {"type": "array", "items": {"type": "string"}},
+    "execution_result": {"type": ["string", "null"]},
+    "verification_result": {"type": ["string", "null"]},
+    "package_result": {"type": ["string", "null"]},
+    "disclosure_ledger_path": {"type": ["string", "null"]},
+    "status": {"enum": ["INITIALIZED", "AUDITED", "PLAN_READY", "WAITING_FOR_AUTHOR_INPUT", "WAITING_FOR_APPROVAL", "APPROVED", "APPLIED", "VERIFIED", "PACKAGE_READY", "COMPLETE", "BLOCKED"]}
+  }
+}

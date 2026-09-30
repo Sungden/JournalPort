@@ -39,6 +39,10 @@ EXPECTED = {
     "profile_diff.schema.json",
     "skill_registry.schema.json",
     "skill_run.schema.json",
+    "transfer_session.schema.json",
+    "agent_proposal.schema.json",
+    "scientific_diff.schema.json",
+    "disclosure_ledger.schema.json",
 }
 
 

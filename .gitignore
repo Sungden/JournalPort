@@ -21,6 +21,11 @@ submission/
 /.journalport-runtime/
 /private-manuscripts/
 /confidential-manuscripts/
+/private/
+/sessions/
+/payloads/
+/approvals/
+/real-run/
 *.approved-payload.txt
 *.private.docx
 *.whl

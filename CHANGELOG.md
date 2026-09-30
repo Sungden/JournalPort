@@ -6,6 +6,9 @@ All notable changes will follow Keep a Changelog and semantic versioning.
 
 ### Added
 
+- Add the M11 Codex-native transfer skill, resumable local transfer sessions, proposal and disclosure
+  contracts, deterministic scientific-token diff safeguards, privacy minimization, and focused
+  abstract/declaration/cover-letter/verification/package workflows.
 - Add the confidential local DOCX transformation executor with payload-bound approvals, surgical
   abstract replacement, administrative-section insertion/heading normalization, atomic output,
   authorized-delta verification, and an offline CLI approval workflow.

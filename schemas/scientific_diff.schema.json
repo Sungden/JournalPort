@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/scientific_diff.schema.json",
+  "title": "JournalPort ScientificDiffReport",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "original_hash", "proposed_hash", "numeric_changes", "percentage_changes", "p_value_changes", "confidence_interval_changes", "date_changes", "gene_protein_changes", "accession_changes", "doi_changes", "url_changes", "citation_changes", "figure_reference_changes", "table_reference_changes", "equation_changes", "reference_identifier_changes", "status"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"}, "original_hash": {"type": "string"}, "proposed_hash": {"type": "string"},
+    "numeric_changes": {"$ref": "#/$defs/changes"}, "percentage_changes": {"$ref": "#/$defs/changes"}, "p_value_changes": {"$ref": "#/$defs/changes"}, "confidence_interval_changes": {"$ref": "#/$defs/changes"}, "date_changes": {"$ref": "#/$defs/changes"}, "gene_protein_changes": {"$ref": "#/$defs/changes"}, "accession_changes": {"$ref": "#/$defs/changes"}, "doi_changes": {"$ref": "#/$defs/changes"}, "url_changes": {"$ref": "#/$defs/changes"}, "citation_changes": {"$ref": "#/$defs/changes"}, "figure_reference_changes": {"$ref": "#/$defs/changes"}, "table_reference_changes": {"$ref": "#/$defs/changes"}, "equation_changes": {"$ref": "#/$defs/changes"}, "reference_identifier_changes": {"$ref": "#/$defs/changes"},
+    "status": {"enum": ["SAFE", "REVIEW_REQUIRED"]}
+  },
+  "$defs": {"changes": {"type": "array", "items": {"type": "string"}}}
+}
