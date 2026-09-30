@@ -104,7 +104,7 @@ def test_source_candidate_isolation_and_deterministic_logical_hash(tmp_path: Pat
 def test_byte_identical_renamed_docx_with_unsupported_content_verifies(tmp_path: Path) -> None:
     source = build_docx(
         tmp_path / "realistic-source.docx",
-        abstract_heading="plain",
+        abstract_heading="flattened",
         front_matter=True,
         numbered_introduction=True,
         warning_field=True,

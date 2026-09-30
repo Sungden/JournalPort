@@ -112,6 +112,19 @@ def _alignment(paragraph: ET.Element) -> str:
     return "" if node is None else node.get(W + "val", "").casefold()
 
 
+def _font_sizes(paragraph: ET.Element) -> tuple[int, ...]:
+    sizes: list[int] = []
+    for run in paragraph.findall("./w:r", NS):
+        if not _text(run).strip():
+            continue
+        size = run.find("./w:rPr/w:sz", NS)
+        if size is not None:
+            raw = size.get(W + "val", "")
+            if raw.isdigit():
+                sizes.append(int(raw))
+    return tuple(sizes)
+
+
 def _heading_label(value: str) -> str:
     return re.sub(r"\s+", " ", value.replace("\u00a0", " ")).strip().rstrip(":").casefold()
 
@@ -144,6 +157,27 @@ def _inline_abstract_body(paragraph: ET.Element) -> str | None:
         return None
     remainder = "".join(_text(child) for child in children[first_text_index + 1 :]).strip()
     return remainder or None
+
+
+def _flattened_abstract_body(value: str) -> str | None:
+    """Split a flattened Abstract token only across a conservative lexical boundary."""
+    normalized = value.replace("\u00a0", " ").strip()
+    token = "Abstract"
+    if not normalized.startswith(token) or len(normalized) == len(token):
+        return None
+    suffix = normalized[len(token) :]
+    if suffix.startswith(":"):
+        body = suffix[1:].lstrip()
+    elif suffix[0].isspace():
+        body = suffix.lstrip()
+    elif suffix[0].isupper():
+        body = suffix
+    else:
+        return None
+    words = re.findall(r"[^\W_]+", body, re.UNICODE)
+    if not body[:1].isupper() or len(words) < 8 or len(body) < 50:
+        return None
+    return body
 
 
 def _numbered_heading_parts(
@@ -352,11 +386,35 @@ def parse_docx(
             for index, element in enumerate(body_elements)
             if element.tag == W + "p" and _text(element).strip()
         ]
+        numbered_headings = _sequenced_numbered_headings(paragraphs)
+        first_numbered_index = next(
+            (index for index, _, _, _ in paragraphs if numbered_headings.get(index) == 1),
+            None,
+        )
         first_paragraph_index = paragraphs[0][0] if paragraphs else None
+        flattened_abstract_bodies: dict[int, str] = {}
+        for position, (index, _, value, _) in enumerate(paragraphs):
+            body_text = _flattened_abstract_body(value)
+            next_index = paragraphs[position + 1][0] if position + 1 < len(paragraphs) else None
+            preceding_front_matter = [item[2] for item in paragraphs[1:position]]
+            strong_front_matter = (
+                len(preceding_front_matter) >= 4
+                and sum(_front_matter_signal(item) for item in preceding_front_matter) >= 2
+            )
+            if (
+                body_text is not None
+                and first_numbered_index is not None
+                and index < first_numbered_index
+                and next_index == first_numbered_index
+                and strong_front_matter
+            ):
+                flattened_abstract_bodies[index] = body_text
         abstract_indices = [
             index
             for index, paragraph, value, _ in paragraphs
-            if _heading_label(value) == "abstract" or _inline_abstract_body(paragraph) is not None
+            if _heading_label(value) == "abstract"
+            or _inline_abstract_body(paragraph) is not None
+            or index in flattened_abstract_bodies
         ]
         first_abstract_index = abstract_indices[0] if abstract_indices else None
         front_matter_values = [
@@ -375,7 +433,20 @@ def parse_docx(
             and len(front_matter_values[0].split()) <= 20
         ):
             has_front_matter_evidence = True
-        numbered_headings = _sequenced_numbered_headings(paragraphs)
+        independent_front_matter = [
+            (paragraph, value)
+            for index, paragraph, value, _ in paragraphs
+            if first_paragraph_index is not None
+            and first_numbered_index is not None
+            and first_paragraph_index < index < first_numbered_index
+        ][:4]
+        independent_front_matter_evidence = (
+            len(independent_front_matter) == 4
+            and sum(_front_matter_signal(value) for _, value in independent_front_matter) >= 2
+        )
+        following_sizes = tuple(
+            size for paragraph, _ in independent_front_matter for size in _font_sizes(paragraph)
+        )
         section_stack: list[Section] = []
         current_section: Section | None = None
         in_references = False
@@ -395,6 +466,7 @@ def parse_docx(
                     "articletitle",
                     "manuscripttitle",
                 }
+                title_sizes = _font_sizes(element)
                 prominent_first = (
                     index == first_paragraph_index
                     and before_abstract
@@ -402,6 +474,13 @@ def parse_docx(
                     and (
                         (_all_text_runs_bold(element) and _alignment(element) == "center")
                         or has_front_matter_evidence
+                        or (
+                            _all_text_runs_bold(element)
+                            and independent_front_matter_evidence
+                            and bool(title_sizes)
+                            and min(title_sizes) >= 32
+                            and (not following_sizes or min(title_sizes) > max(following_sizes))
+                        )
                     )
                 )
                 if value and (styled_title or prominent_first):
@@ -411,6 +490,8 @@ def parse_docx(
                     not section.title for section in manuscript.main_body
                 )
                 inline_abstract = _inline_abstract_body(element) if only_front_matter else None
+                if inline_abstract is None and only_front_matter:
+                    inline_abstract = flattened_abstract_bodies.get(index)
                 if inline_abstract is not None:
                     section = Section(
                         ids.make("section", f"word/document.xml:p:{index}", "Abstract"),

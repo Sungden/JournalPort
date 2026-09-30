@@ -16,6 +16,9 @@ All notable changes will follow Keep a Changelog and semantic versioning.
 - Parse distinctly bold inline `Abstract` lead-ins without dropping their same-paragraph body, and
   recognize short, fully bold N/N.N section headings only when their numbering is sequentially
   plausible.
+- Support single-run flattened `Abstract` front matter only when exact token boundaries, substantial
+  body text, preceding author/contact structure, and the following first numbered section all agree;
+  recognize independently corroborated large-font bold BodyText titles.
 - Report pending/manual action postconditions as not applicable instead of multiplying an unrelated
   global preservation failure across every unexecuted action.
 

@@ -202,6 +202,70 @@ def test_real_world_front_matter_and_all_numbered_sections(tmp_path: Path) -> No
     assert "References" in [section.title for section in parsed.main_body]
 
 
+@pytest.mark.parametrize("heading", ("flattened", "flattened_space", "flattened_colon"))
+def test_flattened_abstract_requires_strong_front_matter(tmp_path: Path, heading: str) -> None:
+    parsed = parse_docx(
+        build_docx(
+            tmp_path / f"{heading}.docx",
+            abstract_heading=heading,
+            core_title=False,
+            real_world_structure=True,
+        )
+    )
+    assert parsed.metadata["title"] == "A World Model of the Virtual Cell"
+    assert len(parsed.abstract) == 1
+    assert (
+        parsed.abstract[0]
+        .paragraphs[0]
+        .text.startswith("The outlook of an AI-driven digital organism")
+    )
+    assert next(section.title for section in parsed.main_body if section.title) == (
+        "1   Introduction"
+    )
+
+
+@pytest.mark.parametrize("heading", ("abstractly", "abstract_concepts"))
+def test_flattened_abstract_prefix_false_positives_are_rejected(
+    tmp_path: Path, heading: str
+) -> None:
+    parsed = parse_docx(
+        build_docx(
+            tmp_path / f"{heading}.docx",
+            abstract_heading=heading,
+            core_title=False,
+            real_world_structure=True,
+        )
+    )
+    assert parsed.metadata["title"] == "A World Model of the Virtual Cell"
+    assert not parsed.abstract
+
+
+def test_flattened_abstract_without_full_front_matter_is_rejected(tmp_path: Path) -> None:
+    parsed = parse_docx(
+        build_docx(
+            tmp_path / "weak-flattened.docx",
+            abstract_heading="flattened",
+            front_matter=True,
+            custom_numbered=(("1 Introduction", True),),
+        )
+    )
+    assert not parsed.abstract
+
+
+def test_flattened_abstract_after_body_start_is_rejected(tmp_path: Path) -> None:
+    parsed = parse_docx(
+        build_docx(
+            tmp_path / "late-flattened.docx",
+            abstract_heading="flattened",
+            core_title=False,
+            real_world_structure=True,
+            abstract_after_introduction=True,
+        )
+    )
+    assert parsed.metadata["title"] == "A World Model of the Virtual Cell"
+    assert not parsed.abstract
+
+
 def test_ambiguous_body_use_of_abstract_remains_fail_closed(tmp_path: Path) -> None:
     parsed = parse_docx(
         build_docx(tmp_path / "ambiguous.docx", abstract_heading="ambiguous", front_matter=True)

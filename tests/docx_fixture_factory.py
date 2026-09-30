@@ -18,6 +18,7 @@ def _paragraph(
     bold: bool = False,
     centered: bool = False,
     spaced: bool = False,
+    font_half_points: int | None = None,
 ) -> str:
     properties = ""
     if style:
@@ -27,8 +28,11 @@ def _paragraph(
     if spaced:
         properties += '<w:spacing w:before="120" w:after="240"/>'
     style_xml = f"<w:pPr>{properties}</w:pPr>" if properties else ""
-    bold_xml = "<w:rPr><w:b/></w:rPr>" if bold else ""
-    return f"<w:p>{style_xml}<w:r>{bold_xml}<w:t>{text}</w:t></w:r></w:p>"
+    run_properties = ("<w:b/>" if bold else "") + (
+        f'<w:sz w:val="{font_half_points}"/>' if font_half_points is not None else ""
+    )
+    run_xml = f"<w:rPr>{run_properties}</w:rPr>" if run_properties else ""
+    return f"<w:p>{style_xml}<w:r>{run_xml}<w:t>{text}</w:t></w:r></w:p>"
 
 
 def _mixed_paragraph(runs: tuple[tuple[str, bool], ...], style: str | None = None) -> str:
@@ -52,6 +56,7 @@ def build_docx(
     core_title: bool = True,
     real_world_structure: bool = False,
     custom_numbered: tuple[tuple[str, bool], ...] = (),
+    abstract_after_introduction: bool = False,
 ) -> Path:
     tracked = ""
     unsupported = ""
@@ -85,12 +90,37 @@ def build_docx(
             "BodyText",
         ),
         "body_sentence": _paragraph("Abstract models can support scientific discovery."),
+        "flattened": _paragraph(
+            "AbstractThe outlook of an AI-driven digital organism includes 6 observations and value 12.5%.",
+            "BodyText",
+        ),
+        "flattened_space": _paragraph(
+            "Abstract The outlook of an AI-driven digital organism includes 6 observations and value 12.5%.",
+            "BodyText",
+        ),
+        "flattened_colon": _paragraph(
+            "Abstract: The outlook of an AI-driven digital organism includes 6 observations and value 12.5%.",
+            "BodyText",
+        ),
+        "abstractly": _paragraph(
+            "Abstractly stated ideas in this paragraph include 6 observations and value 12.5%.",
+            "BodyText",
+        ),
+        "abstract_concepts": _paragraph(
+            "Abstract concepts in this paragraph include 6 observations and value 12.5% for comparison.",
+            "BodyText",
+        ),
         "ambiguous": _paragraph("This abstract describes prior work."),
     }[abstract_heading]
     title_paragraph = {
         "styled": _paragraph("Synthetic DOCX study", "Title"),
         "bold_centered": _paragraph("Synthetic DOCX study", bold=True, centered=True),
-        "bold_bodytext": _paragraph("A World Model of the Virtual Cell", "BodyText", bold=True),
+        "bold_bodytext": _paragraph(
+            "A World Model of the Virtual Cell",
+            "BodyText",
+            bold=True,
+            font_half_points=34,
+        ),
         "plain": _paragraph("Synthetic DOCX study"),
         "ambiguous": _paragraph("This paragraph discusses preliminary observations."),
         "none": "",
@@ -112,20 +142,32 @@ def build_docx(
             for value, bold in custom_numbered
         )
     if real_world_structure:
-        title_paragraph = _paragraph("A World Model of the Virtual Cell", "BodyText", bold=True)
+        title_paragraph = _paragraph(
+            "A World Model of the Virtual Cell",
+            "BodyText",
+            bold=True,
+            font_half_points=34,
+        )
         front = (
             _paragraph("Ada Example and Charles Example", "BodyText", bold=True)
             + _paragraph("Example Institute", "BodyText", bold=True)
             + _paragraph("ada@example.invalid; charles@example.invalid", "BodyText")
             + _paragraph("30 September 2026", "BodyText")
         )
-        abstract_paragraph = _mixed_paragraph(
-            (
-                ("Abstract", True),
-                ("The outlook includes 6 observations, citation [1], and value 12.5%.", False),
-            ),
-            "BodyText",
-        )
+        if abstract_heading not in {
+            "flattened",
+            "flattened_space",
+            "flattened_colon",
+            "abstractly",
+            "abstract_concepts",
+        }:
+            abstract_paragraph = _mixed_paragraph(
+                (
+                    ("Abstract", True),
+                    ("The outlook includes 6 observations, citation [1], and value 12.5%.", False),
+                ),
+                "BodyText",
+            )
         headings = (
             "1   Introduction",
             "2   Operational Definition",
@@ -149,9 +191,10 @@ def build_docx(
     <w:document xmlns:w="{W}" xmlns:m="{M}" xmlns:a="{A}" xmlns:r="{R}"><w:body>
       {title_paragraph}
       {front}
-      {abstract_paragraph}
+      {"" if abstract_after_introduction else abstract_paragraph}
       {"" if real_world_structure else _paragraph("We summarize 6 observations.")}
       {introduction}
+      {abstract_paragraph if abstract_after_introduction else ""}
       {"" if real_world_structure else _paragraph("We measured 42 samples; response 12.5% and p &lt; 0.01.")}
       <w:p><w:r><w:instrText>CITATION doe2025</w:instrText><w:t>[1]</w:t></w:r></w:p>
       <w:p><m:oMath><m:r><m:t>y=2x+1</m:t></m:r></m:oMath></w:p>
