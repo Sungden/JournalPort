@@ -13,6 +13,9 @@ All notable changes will follow Keep a Changelog and semantic versioning.
 - Recover conservative first-paragraph titles from common DOCX styling/front matter, and fail with
   an evaluation error when a title rule has no non-empty canonical title instead of counting zero
   words as a passing value.
+- Parse distinctly bold inline `Abstract` lead-ins without dropping their same-paragraph body, and
+  recognize short, fully bold N/N.N section headings only when their numbering is sequentially
+  plausible.
 - Report pending/manual action postconditions as not applicable instead of multiplying an unrelated
   global preservation failure across every unexecuted action.
 

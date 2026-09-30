@@ -31,6 +31,15 @@ def _paragraph(
     return f"<w:p>{style_xml}<w:r>{bold_xml}<w:t>{text}</w:t></w:r></w:p>"
 
 
+def _mixed_paragraph(runs: tuple[tuple[str, bool], ...], style: str | None = None) -> str:
+    style_xml = f'<w:pPr><w:pStyle w:val="{style}"/></w:pPr>' if style else ""
+    run_xml = "".join(
+        f"<w:r>{'<w:rPr><w:b/></w:rPr>' if bold else ''}<w:t>{text}</w:t></w:r>"
+        for text, bold in runs
+    )
+    return f"<w:p>{style_xml}{run_xml}</w:p>"
+
+
 def build_docx(
     path: Path,
     *,
@@ -41,6 +50,8 @@ def build_docx(
     warning_field: bool = False,
     title_mode: str = "styled",
     core_title: bool = True,
+    real_world_structure: bool = False,
+    custom_numbered: tuple[tuple[str, bool], ...] = (),
 ) -> Path:
     tracked = ""
     unsupported = ""
@@ -62,11 +73,24 @@ def build_docx(
         "plain": _paragraph("Abstract"),
         "bold": _paragraph("Abstract", bold=True),
         "plain_colon": _paragraph("Abstract:", spaced=True),
+        "inline": _mixed_paragraph(
+            (("Abstract", True), ("The outlook includes 6 observations and citation [1].", False)),
+            "BodyText",
+        ),
+        "inline_colon": _mixed_paragraph(
+            (
+                ("Abstract:", True),
+                (" The outlook includes 6 observations and citation [1].", False),
+            ),
+            "BodyText",
+        ),
+        "body_sentence": _paragraph("Abstract models can support scientific discovery."),
         "ambiguous": _paragraph("This abstract describes prior work."),
     }[abstract_heading]
     title_paragraph = {
         "styled": _paragraph("Synthetic DOCX study", "Title"),
         "bold_centered": _paragraph("Synthetic DOCX study", bold=True, centered=True),
+        "bold_bodytext": _paragraph("A World Model of the Virtual Cell", "BodyText", bold=True),
         "plain": _paragraph("Synthetic DOCX study"),
         "ambiguous": _paragraph("This paragraph discusses preliminary observations."),
         "none": "",
@@ -82,21 +106,60 @@ def build_docx(
         "1 Introduction" if numbered_introduction else "Results",
         None if numbered_introduction else "Heading1",
     )
+    if custom_numbered:
+        introduction = "".join(
+            _paragraph(value, "BodyText", bold=bold) + _paragraph("Section body text.")
+            for value, bold in custom_numbered
+        )
+    if real_world_structure:
+        title_paragraph = _paragraph("A World Model of the Virtual Cell", "BodyText", bold=True)
+        front = (
+            _paragraph("Ada Example and Charles Example", "BodyText", bold=True)
+            + _paragraph("Example Institute", "BodyText", bold=True)
+            + _paragraph("ada@example.invalid; charles@example.invalid", "BodyText")
+            + _paragraph("30 September 2026", "BodyText")
+        )
+        abstract_paragraph = _mixed_paragraph(
+            (
+                ("Abstract", True),
+                ("The outlook includes 6 observations, citation [1], and value 12.5%.", False),
+            ),
+            "BodyText",
+        )
+        headings = (
+            "1   Introduction",
+            "2   Operational Definition",
+            "3   What can a Virtual Cell be Used for Biomedicine?",
+            "4   Architecture of a Virtual Cell World Model",
+            "5   Key Differentiator",
+            "6   Data Requirements",
+            "7   Why a World Model?",
+            "8   Computational and Technical Hurdles",
+            "9   Evaluation",
+            "10  From Integration to Holistic Modeling",
+            "11  Toward Virtual Cell Banks and Digital Organisms",
+            "12  Conclusion",
+        )
+        introduction = "".join(
+            _paragraph(heading, "BodyText", bold=True)
+            + _paragraph(f"Body text for section {position}.", "BodyText")
+            for position, heading in enumerate(headings, start=1)
+        )
     document = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     <w:document xmlns:w="{W}" xmlns:m="{M}" xmlns:a="{A}" xmlns:r="{R}"><w:body>
       {title_paragraph}
       {front}
       {abstract_paragraph}
-      {_paragraph("We summarize 6 observations.")}
+      {"" if real_world_structure else _paragraph("We summarize 6 observations.")}
       {introduction}
-      {_paragraph("We measured 42 samples; response 12.5% and p &lt; 0.01.")}
+      {"" if real_world_structure else _paragraph("We measured 42 samples; response 12.5% and p &lt; 0.01.")}
       <w:p><w:r><w:instrText>CITATION doe2025</w:instrText><w:t>[1]</w:t></w:r></w:p>
       <w:p><m:oMath><m:r><m:t>y=2x+1</m:t></m:r></m:oMath></w:p>
       <w:p><w:r><w:drawing><a:blip r:embed="rIdImage1"/></w:drawing></w:r></w:p>
       {_paragraph("Figure 1 Synthetic signal.", "Caption")}
       <w:tbl><w:tr><w:tc>{_paragraph("A")}</w:tc><w:tc>{_paragraph("2")}</w:tc></w:tr></w:tbl>
       {_paragraph("Table 1 Synthetic values.", "Caption")}
-      {_paragraph("References", "Heading1")}
+      {_paragraph("References", "BodyText", bold=True) if real_world_structure else _paragraph("References", "Heading1")}
       {_paragraph("Doe J. Synthetic reference. 2025.")}
       {tracked}{unknown_field}{unsupported}
       <w:sectPr/>

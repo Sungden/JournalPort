@@ -128,6 +128,67 @@ def _all_text_runs_bold(paragraph: ET.Element) -> bool:
     return True
 
 
+def _inline_abstract_body(paragraph: ET.Element) -> str | None:
+    """Return body text only for a distinct bold Abstract lead-in run."""
+    children = list(paragraph)
+    first_text_index = next(
+        (index for index, child in enumerate(children) if _text(child).strip()), None
+    )
+    if first_text_index is None:
+        return None
+    lead = children[first_text_index]
+    if lead.tag != W + "r" or _heading_label(_text(lead)) != "abstract":
+        return None
+    bold = lead.find("./w:rPr/w:b", NS)
+    if bold is None or bold.get(W + "val", "true").casefold() in {"0", "false", "off"}:
+        return None
+    remainder = "".join(_text(child) for child in children[first_text_index + 1 :]).strip()
+    return remainder or None
+
+
+def _numbered_heading_parts(
+    value: str, paragraph: ET.Element
+) -> tuple[int, int | None, int] | None:
+    """Return a strongly formatted, heading-like numeric label."""
+    match = re.fullmatch(r"([1-9]\d*)(?:\.([1-9]\d*))?[.)]?\s+(.+)", value.strip())
+    if not match or not _all_text_runs_bold(paragraph):
+        return None
+    heading_text = match.group(3).strip()
+    words = re.findall(r"[^\W_]+", heading_text, re.UNICODE)
+    if not words or len(words) > 20 or len(value) > 200:
+        return None
+    if heading_text.endswith((".", ";")):
+        return None
+    minor = int(match.group(2)) if match.group(2) else None
+    return int(match.group(1)), minor, 2 if minor is not None else 1
+
+
+def _sequenced_numbered_headings(
+    paragraphs: list[tuple[int, ET.Element, str, str]],
+) -> dict[int, int]:
+    """Accept only a continuous top-level sequence and its continuous subsections."""
+    accepted: dict[int, int] = {}
+    expected_top = 1
+    active_top: int | None = None
+    expected_minor = 1
+    for index, paragraph, value, _ in paragraphs:
+        parts = _numbered_heading_parts(value, paragraph)
+        if parts is None:
+            continue
+        major, minor, level = parts
+        if level == 1:
+            if major != expected_top:
+                continue
+            accepted[index] = level
+            active_top = major
+            expected_top += 1
+            expected_minor = 1
+        elif major == active_top and minor == expected_minor:
+            accepted[index] = level
+            expected_minor += 1
+    return accepted
+
+
 def _plain_heading(
     value: str, paragraph: ET.Element, before_body_sections: bool
 ) -> tuple[int, str] | None:
@@ -293,7 +354,9 @@ def parse_docx(
         ]
         first_paragraph_index = paragraphs[0][0] if paragraphs else None
         abstract_indices = [
-            index for index, _, value, _ in paragraphs if _heading_label(value) == "abstract"
+            index
+            for index, paragraph, value, _ in paragraphs
+            if _heading_label(value) == "abstract" or _inline_abstract_body(paragraph) is not None
         ]
         first_abstract_index = abstract_indices[0] if abstract_indices else None
         front_matter_values = [
@@ -306,6 +369,13 @@ def parse_docx(
         has_front_matter_evidence = len(front_matter_values) >= 2 and any(
             _front_matter_signal(value) for value in front_matter_values
         )
+        if (
+            first_abstract_index is not None
+            and len(front_matter_values) == 1
+            and len(front_matter_values[0].split()) <= 20
+        ):
+            has_front_matter_evidence = True
+        numbered_headings = _sequenced_numbered_headings(paragraphs)
         section_stack: list[Section] = []
         current_section: Section | None = None
         in_references = False
@@ -340,8 +410,26 @@ def parse_docx(
                 only_front_matter = not manuscript.main_body or all(
                     not section.title for section in manuscript.main_body
                 )
-                inferred_heading = _plain_heading(value, element, only_front_matter)
-                if heading_match or inferred_heading:
+                inline_abstract = _inline_abstract_body(element) if only_front_matter else None
+                if inline_abstract is not None:
+                    section = Section(
+                        ids.make("section", f"word/document.xml:p:{index}", "Abstract"),
+                        "Abstract",
+                        1,
+                        loc,
+                    )
+                    section_stack.clear()
+                    section_stack.append(section)
+                    manuscript.abstract.append(section)
+                    current_section = section
+                    in_references = False
+                    value = inline_abstract
+                inferred_heading = (
+                    (numbered_headings[index], value)
+                    if index in numbered_headings
+                    else _plain_heading(value, element, only_front_matter)
+                )
+                if inline_abstract is None and (heading_match or inferred_heading):
                     level = (
                         int(heading_match.group(1)) if heading_match else inferred_heading[0]  # type: ignore[index]
                     )

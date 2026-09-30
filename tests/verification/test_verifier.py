@@ -110,10 +110,12 @@ def test_byte_identical_renamed_docx_with_unsupported_content_verifies(tmp_path:
         warning_field=True,
         title_mode="plain",
         core_title=False,
+        real_world_structure=True,
     )
     manuscript = parse_docx(source)
-    assert manuscript.metadata["title"] == "Synthetic DOCX study"
+    assert manuscript.metadata["title"] == "A World Model of the Virtual Cell"
     assert manuscript.abstract
+    assert sum(section.title[:1].isdigit() for section in manuscript.main_body) == 12
     assert manuscript.unsupported_content
     profile = resolved_with(active_rule(value=500))
     before = audit_manuscript(manuscript, profile, evaluation_timestamp=STAMP)
