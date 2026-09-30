@@ -47,6 +47,19 @@ def test_unsupported_operator_is_explicit() -> None:
     assert report.readiness_status == "EVALUATION_FAILED"
 
 
+@pytest.mark.parametrize("missing_title", ("", "   "))
+def test_missing_title_cannot_pass_max_words(missing_title: str) -> None:
+    source = manuscript()
+    source.metadata["title"] = missing_title
+    title_rule = replace(active_rule("title.max_words", 20), evaluation_scope="TITLE_TEXT")
+    report = audit_manuscript(source, resolved_with(title_rule))
+    finding = next(item for item in report.findings if item.rule_id == "title.max_words")
+    assert finding.status == "EVALUATION_ERROR"
+    assert finding.current_value is None
+    assert "missing canonical title" in finding.message
+    assert report.readiness_status == "EVALUATION_FAILED"
+
+
 def test_wrong_resolved_hash_and_tampered_trace_fail_closed() -> None:
     profile = resolved_with(active_rule())
     with pytest.raises(ValueError, match="hash mismatch"):

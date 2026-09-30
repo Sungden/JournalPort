@@ -11,8 +11,22 @@ A = "http://schemas.openxmlformats.org/drawingml/2006/main"
 R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 
 
-def _paragraph(text: str, style: str | None = None, *, bold: bool = False) -> str:
-    style_xml = f'<w:pPr><w:pStyle w:val="{style}"/></w:pPr>' if style else ""
+def _paragraph(
+    text: str,
+    style: str | None = None,
+    *,
+    bold: bool = False,
+    centered: bool = False,
+    spaced: bool = False,
+) -> str:
+    properties = ""
+    if style:
+        properties += f'<w:pStyle w:val="{style}"/>'
+    if centered:
+        properties += '<w:jc w:val="center"/>'
+    if spaced:
+        properties += '<w:spacing w:before="120" w:after="240"/>'
+    style_xml = f"<w:pPr>{properties}</w:pPr>" if properties else ""
     bold_xml = "<w:rPr><w:b/></w:rPr>" if bold else ""
     return f"<w:p>{style_xml}<w:r>{bold_xml}<w:t>{text}</w:t></w:r></w:p>"
 
@@ -25,6 +39,8 @@ def build_docx(
     front_matter: bool = False,
     numbered_introduction: bool = False,
     warning_field: bool = False,
+    title_mode: str = "styled",
+    core_title: bool = True,
 ) -> Path:
     tracked = ""
     unsupported = ""
@@ -42,13 +58,23 @@ def build_docx(
         unknown_field = "<w:p><w:r><w:instrText>REF bookmark</w:instrText><w:t>cross-reference</w:t></w:r></w:p>"
     abstract_paragraph = {
         "styled": _paragraph("Abstract", "Heading1"),
+        "custom_styled": _paragraph("Abstract", "Abstract", spaced=True),
         "plain": _paragraph("Abstract"),
         "bold": _paragraph("Abstract", bold=True),
+        "plain_colon": _paragraph("Abstract:", spaced=True),
         "ambiguous": _paragraph("This abstract describes prior work."),
     }[abstract_heading]
+    title_paragraph = {
+        "styled": _paragraph("Synthetic DOCX study", "Title"),
+        "bold_centered": _paragraph("Synthetic DOCX study", bold=True, centered=True),
+        "plain": _paragraph("Synthetic DOCX study"),
+        "ambiguous": _paragraph("This paragraph discusses preliminary observations."),
+        "none": "",
+    }[title_mode]
     front = (
         _paragraph("Ada Example and Charles Example")
-        + _paragraph("Example Institute; contact@example.invalid; 30 September 2026")
+        + _paragraph("Example Institute; contact@example.invalid")
+        + _paragraph("30 September 2026")
         if front_matter
         else ""
     )
@@ -58,7 +84,7 @@ def build_docx(
     )
     document = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     <w:document xmlns:w="{W}" xmlns:m="{M}" xmlns:a="{A}" xmlns:r="{R}"><w:body>
-      {_paragraph("Synthetic DOCX study", "Title")}
+      {title_paragraph}
       {front}
       {abstract_paragraph}
       {_paragraph("We summarize 6 observations.")}
@@ -79,8 +105,9 @@ def build_docx(
     <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
       <Relationship Id="rIdImage1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image1.png"/>
     </Relationships>"""
-    core = """<?xml version="1.0" encoding="UTF-8"?>
-    <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:title>Synthetic DOCX study</dc:title><dc:creator>Ada Example</dc:creator></cp:coreProperties>"""
+    core_title_xml = "<dc:title>Synthetic DOCX study</dc:title>" if core_title else ""
+    core = f"""<?xml version="1.0" encoding="UTF-8"?>
+    <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/">{core_title_xml}<dc:creator>Ada Example</dc:creator></cp:coreProperties>"""
     footnotes = f"""<?xml version="1.0" encoding="UTF-8"?>
     <w:footnotes xmlns:w="{W}"><w:footnote w:id="1">{_paragraph("Synthetic footnote 3.14")}</w:footnote></w:footnotes>"""
     endnotes = f"""<?xml version="1.0" encoding="UTF-8"?>

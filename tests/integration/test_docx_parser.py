@@ -59,7 +59,7 @@ def test_docx_hazards_are_blocking_and_raw_preserved(tmp_path: Path) -> None:
     assert "citation [2] with 11" in (tracked.raw_fragment or "")
 
 
-@pytest.mark.parametrize("heading", ("styled", "plain", "bold"))
+@pytest.mark.parametrize("heading", ("styled", "custom_styled", "plain", "bold", "plain_colon"))
 def test_common_abstract_headings_with_front_matter_are_recognized(
     tmp_path: Path, heading: str
 ) -> None:
@@ -74,6 +74,36 @@ def test_common_abstract_headings_with_front_matter_are_recognized(
     assert len(parsed.abstract) == 1
     assert parsed.abstract[0].paragraphs[0].text == "We summarize 6 observations."
     assert "1 Introduction" in [section.title for section in parsed.main_body]
+
+
+@pytest.mark.parametrize("title_mode", ("styled", "bold_centered", "plain"))
+def test_common_front_matter_titles_are_recognized_without_core_metadata(
+    tmp_path: Path, title_mode: str
+) -> None:
+    parsed = parse_docx(
+        build_docx(
+            tmp_path / f"title-{title_mode}.docx",
+            title_mode=title_mode,
+            core_title=False,
+            front_matter=True,
+            abstract_heading="plain",
+            numbered_introduction=True,
+        )
+    )
+    assert parsed.metadata["title"] == "Synthetic DOCX study"
+    assert parsed.abstract[0].paragraphs[0].text == "We summarize 6 observations."
+
+
+def test_ambiguous_first_paragraph_is_not_silently_inferred_as_title(tmp_path: Path) -> None:
+    parsed = parse_docx(
+        build_docx(
+            tmp_path / "ambiguous-title.docx",
+            title_mode="ambiguous",
+            core_title=False,
+            front_matter=True,
+        )
+    )
+    assert parsed.metadata["title"] == ""
 
 
 def test_ambiguous_body_use_of_abstract_remains_fail_closed(tmp_path: Path) -> None:

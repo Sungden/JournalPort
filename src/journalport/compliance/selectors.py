@@ -37,7 +37,7 @@ def select_target(manuscript: CanonicalManuscript, rule: ProfileRule) -> Selecti
     target = rule.target
     if target == "title":
         value = manuscript.metadata.get("title")
-        if not isinstance(value, str):
+        if not isinstance(value, str) or not value.strip():
             return Selection(target, (), None, "metadata.title", "missing canonical title")
         return Selection(
             target, (manuscript.manuscript_id,), _measure(value, rule), "metadata.title"

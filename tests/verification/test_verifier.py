@@ -108,8 +108,11 @@ def test_byte_identical_renamed_docx_with_unsupported_content_verifies(tmp_path:
         front_matter=True,
         numbered_introduction=True,
         warning_field=True,
+        title_mode="plain",
+        core_title=False,
     )
     manuscript = parse_docx(source)
+    assert manuscript.metadata["title"] == "Synthetic DOCX study"
     assert manuscript.abstract
     assert manuscript.unsupported_content
     profile = resolved_with(active_rule(value=500))

@@ -77,3 +77,35 @@ PARTIAL/UNKNOWN and missing author artifacts still require human review.
 
 The scoped bugfix is ready for review and hosted CI. No production profile, benchmark baseline,
 `v0.1.0rc1` tag, or release asset changed. Creating an rc2 tag/release requires separate approval.
+
+## RC2-2 front-matter parser follow-up
+
+**PASS — implemented and locally validated on 2026-09-30; no tag or release created.**
+
+The follow-up reproduced the reported empty title and Abstract using only minimized synthetic DOCX
+packages. Two additional root causes were identified:
+
+1. An empty canonical title remained a string, so `title.max_words` measured it as zero and could
+   incorrectly pass.
+2. The unstyled numbered-heading fallback accepted any leading number. A front-matter date such as
+   `30 September 2026` therefore opened a body section and prevented a following plain Abstract
+   heading from being recognized.
+
+The parser now recognizes a title only from the first non-empty paragraph when it has an explicit
+title style, is bold and centered, or is conservatively title-shaped with corroborating front-matter
+evidence before Abstract. Sentence-like or otherwise ambiguous first paragraphs are not promoted.
+Abstract labels are whitespace/case/colon normalized and may be heading-styled, custom-styled,
+plain, or bold. Numbered unstyled headings are limited to a conservative known section vocabulary,
+so dates do not terminate front-matter parsing. Missing or whitespace-only titles now produce
+`EVALUATION_ERROR` and readiness `EVALUATION_FAILED`.
+
+Regression coverage includes styled, bold-centered, and plain titles without core metadata; author,
+affiliation/contact, and date front matter; styled/custom-styled/plain/bold/colon Abstract labels;
+numbered Introduction; ambiguous first paragraphs; and empty-title compliance evaluation. The
+byte-identical synthetic audit → plan → apply → verify path uses the realistic plain-title fixture
+and reaches `VERIFIED_CANDIDATE` while unsupported content remains independently checked.
+
+Validation: 176 pytest tests passed; Ruff lint and format checks passed; mypy passed; compileall and
+`git diff --check` passed. Remaining limitations are deliberately fail-closed: mixed-run visual
+prominence, text boxes/floating shapes, localized or unconventional section names, and semantic
+author/affiliation decomposition are not inferred.

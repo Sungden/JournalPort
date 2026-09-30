@@ -10,6 +10,9 @@ All notable changes will follow Keep a Changelog and semantic versioning.
   strict detection of additions, removals, mutations, type/severity changes, and multiplicity.
 - Recognize common styled, plain, and bold Abstract headings with front matter and numbered body
   headings without treating arbitrary body mentions as headings.
+- Recover conservative first-paragraph titles from common DOCX styling/front matter, and fail with
+  an evaluation error when a title rule has no non-empty canonical title instead of counting zero
+  words as a passing value.
 - Report pending/manual action postconditions as not applicable instead of multiplying an unrelated
   global preservation failure across every unexecuted action.
 

@@ -107,6 +107,15 @@ def _style(paragraph: ET.Element) -> str:
     return "" if node is None else node.get(W + "val", "")
 
 
+def _alignment(paragraph: ET.Element) -> str:
+    node = paragraph.find("./w:pPr/w:jc", NS)
+    return "" if node is None else node.get(W + "val", "").casefold()
+
+
+def _heading_label(value: str) -> str:
+    return re.sub(r"\s+", " ", value.replace("\u00a0", " ")).strip().rstrip(":").casefold()
+
+
 def _all_text_runs_bold(paragraph: ET.Element) -> bool:
     """Return true only when every non-empty text run is explicitly bold."""
     runs = [run for run in paragraph.findall("./w:r", NS) if _text(run).strip()]
@@ -123,12 +132,25 @@ def _plain_heading(
     value: str, paragraph: ET.Element, before_body_sections: bool
 ) -> tuple[int, str] | None:
     """Recognize conservative common headings when Word styles are absent."""
-    if value.casefold() == "abstract" and before_body_sections:
+    label = _heading_label(value)
+    if label == "abstract" and before_body_sections:
         return 1, "Abstract"
-    numbered = re.fullmatch(r"([1-9]\d*)(?:\.([1-9]\d*))?[.)]?\s+(.+)", value)
-    if numbered:
+    numbered = re.fullmatch(r"([1-9]\d*)(?:\.([1-9]\d*))?[.)]?\s+(.+)", value.strip())
+    common_sections = {
+        "introduction",
+        "background",
+        "methods",
+        "materials and methods",
+        "results",
+        "discussion",
+        "conclusion",
+        "conclusions",
+        "references",
+        "bibliography",
+    }
+    if numbered and _heading_label(numbered.group(3)) in common_sections:
         return (2 if numbered.group(2) else 1), value
-    if _all_text_runs_bold(paragraph) and value.casefold() in {
+    if _all_text_runs_bold(paragraph) and label in {
         "abstract",
         "introduction",
         "methods",
@@ -139,6 +161,26 @@ def _plain_heading(
     }:
         return 1, value
     return None
+
+
+def _front_matter_signal(value: str) -> bool:
+    normalized = value.casefold()
+    return bool(
+        "@" in value
+        or re.search(
+            r"\b(university|institute|department|laboratory|centre|center|hospital|correspondence|affiliation)\b",
+            normalized,
+        )
+        or re.search(
+            r"\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\b",
+            normalized,
+        )
+    )
+
+
+def _plausible_plain_title(value: str) -> bool:
+    words = re.findall(r"[^\W_]+", value, re.UNICODE)
+    return 3 <= len(words) <= 40 and len(value) <= 300 and not value.endswith((".", ":", ";"))
 
 
 def _relationships(archive: zipfile.ZipFile, limits: DocxResourceLimits) -> dict[str, str]:
@@ -243,20 +285,56 @@ def parse_docx(
         body = root.find("w:body", NS)
         if body is None:
             raise DocxParseError("word/document.xml has no body")
+        body_elements = list(body)
+        paragraphs = [
+            (index, element, _text(element).strip(), _style(element))
+            for index, element in enumerate(body_elements)
+            if element.tag == W + "p" and _text(element).strip()
+        ]
+        first_paragraph_index = paragraphs[0][0] if paragraphs else None
+        abstract_indices = [
+            index for index, _, value, _ in paragraphs if _heading_label(value) == "abstract"
+        ]
+        first_abstract_index = abstract_indices[0] if abstract_indices else None
+        front_matter_values = [
+            value
+            for index, _, value, _ in paragraphs
+            if first_paragraph_index is not None
+            and first_abstract_index is not None
+            and first_paragraph_index < index < first_abstract_index
+        ]
+        has_front_matter_evidence = len(front_matter_values) >= 2 and any(
+            _front_matter_signal(value) for value in front_matter_values
+        )
         section_stack: list[Section] = []
         current_section: Section | None = None
         in_references = False
         pending_figure_captions: list[str] = []
         pending_table_captions: list[str] = []
 
-        for index, element in enumerate(list(body)):
+        for index, element in enumerate(body_elements):
             loc = _locator(source_path.name, "word/document.xml", index)
             raw_xml = ET.tostring(element, encoding="unicode")
             if element.tag == W + "p":
                 value = _text(element).strip()
                 style = _style(element)
                 heading_match = re.match(r"Heading\s*([1-9])", style, re.IGNORECASE)
-                if style.lower() in {"title", "articletitle"} and value:
+                before_abstract = first_abstract_index is None or index < first_abstract_index
+                styled_title = index == first_paragraph_index and style.casefold() in {
+                    "title",
+                    "articletitle",
+                    "manuscripttitle",
+                }
+                prominent_first = (
+                    index == first_paragraph_index
+                    and before_abstract
+                    and _plausible_plain_title(value)
+                    and (
+                        (_all_text_runs_bold(element) and _alignment(element) == "center")
+                        or has_front_matter_evidence
+                    )
+                )
+                if value and (styled_title or prominent_first):
                     manuscript.metadata["title"] = value
                     continue
                 only_front_matter = not manuscript.main_body or all(
@@ -279,7 +357,7 @@ def parse_docx(
                     )
                     while section_stack and section_stack[-1].level >= level:
                         section_stack.pop()
-                    if value.casefold() == "abstract" and level == 1:
+                    if _heading_label(value) == "abstract" and level == 1:
                         section_stack.clear()
                         manuscript.abstract.append(section)
                     elif section_stack:
@@ -288,7 +366,7 @@ def parse_docx(
                         manuscript.main_body.append(section)
                     section_stack.append(section)
                     current_section = section
-                    in_references = value.casefold() in {"references", "bibliography"}
+                    in_references = _heading_label(value) in {"references", "bibliography"}
                     continue
                 if (
                     re.match(r"^(figure|fig\.)\s*\d+", value, re.IGNORECASE)
