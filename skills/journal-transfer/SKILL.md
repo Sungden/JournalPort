@@ -1,6 +1,7 @@
 ---
 name: journal-transfer
 description: Orchestrate a privacy-preserving journal transfer with proposal review, M10 approval-bound execution, independent verification, and package checks.
+compatibility: JournalPort Core >=1.0.0rc1,<2
 ---
 
 # Journal transfer
@@ -24,6 +25,12 @@ edit the authoritative DOCX outside Core or bypass M10. Stop on verification fai
 changes, unsupported execution, profile uncertainty, or missing factual input. Resume only from a
 validated local session. The strongest manuscript result is `VERIFIED_CANDIDATE`; package readiness
 is reported separately.
+
+Prioritize [format transformation](workflows/format_transformation.md): first ask whether a target gap
+can be solved deterministically without changing scientific meaning. Prefer verified, idempotent format
+operations and explicit source-to-target transfer matrices over content proposals. `PARTIAL`, `UNKNOWN`,
+`STALE`, and `CONFLICTED` rules never trigger automatic formatting. Content proposals are used only
+when a verified target requirement cannot be satisfied through content-preserving transformation.
 
 Read the focused workflows for [abstract revision](workflows/abstract_revision.md), [administrative
 statements](workflows/administrative_statements.md), [cover letters](workflows/cover_letter.md),

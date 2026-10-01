@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1.0.0/full_format_plan.schema.json",
+  "title": "JournalPort full DOCX format plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_hash", "target_journal", "article_type", "submission_stage", "profile_version", "document_target", "m12_plan", "manual_requirements", "profile_uncertainties", "plan_hash"],
+  "properties": {
+    "conditional_applicability": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "schema_version": {"const": "1.0.0"},
+    "source_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "plan_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "target_journal": {"type": "string"},
+    "article_type": {"type": "string"},
+    "submission_stage": {"enum": ["INITIAL_SUBMISSION", "REVISION", "FINAL_SUBMISSION", "ACCEPTED"]},
+    "profile_version": {"type": "string"},
+    "document_target": {"type": "object"},
+    "m12_plan": {"type": "object"},
+    "manual_requirements": {"type": "array"},
+    "profile_uncertainties": {"type": "array"},
+    "content_proposals": {"type": "array", "maxItems": 0},
+    "structural_operations": {"type": "array"},
+    "style_operations": {"type": "array"},
+    "artifact_operations": {"type": "array"},
+    "supplement_inventory": {"type": "array"},
+    "unsupported_targets": {"type": "array"},
+    "block_confidence": {"type": "array"},
+    "semantic_roles": {"type": "object"},
+    "citation_linkage": {"type": "object"}
+  }
+}

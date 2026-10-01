@@ -30,6 +30,13 @@ def resolved_hash(profile: ResolvedJournalProfile) -> str:
                 item.pop("critical_for_readiness")
             if item.get("evaluation_scope") == "UNSPECIFIED":
                 item.pop("evaluation_scope")
+            if item.get("submission_stages") == (
+                "INITIAL_SUBMISSION",
+                "REVISION",
+                "FINAL_SUBMISSION",
+                "ACCEPTED",
+            ):
+                item.pop("submission_stages")
             for child in item.values():
                 strip_defaults(child)
         elif isinstance(item, (list, tuple)):

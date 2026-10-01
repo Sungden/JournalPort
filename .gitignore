@@ -26,8 +26,13 @@ submission/
 /payloads/
 /approvals/
 /real-run/
+/paper/
 *.approved-payload.txt
 *.private.docx
 *.whl
 *.tar.gz
+/examples/public-synthetic/*.docx
+/examples/public-synthetic/*.json
+/examples/public-synthetic/transformed/
+/examples/public-synthetic/submission-package/
 

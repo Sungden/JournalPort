@@ -16,7 +16,7 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Scientific/Engineering",
 ]
-dependencies = ["jsonschema[format]>=4.23,<5"]
+dependencies = ["jsonschema[format]>=4.23,<5", "lxml>=5,<7", "pypdf>=5,<7"]
 
 [project.urls]
 Homepage = "https://github.com/Sungden/JournalPort"
@@ -29,7 +29,7 @@ journalport = "journalport.cli:main"
 
 [project.optional-dependencies]
 agent = []
-dev = ["build>=1.2,<2", "mypy>=1.14,<2", "pytest>=8,<10", "ruff>=0.8,<1", "types-jsonschema>=4.23,<5"]
+dev = ["build>=1.2,<2", "mypy>=1.14,<2", "pytest>=8,<10", "ruff>=0.8,<1", "types-jsonschema>=4.23,<5", "types-lxml>=2025"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/journalport"]
@@ -37,9 +37,18 @@ packages = ["src/journalport"]
 [tool.hatch.build.targets.wheel.force-include]
 "schemas" = "journalport/schemas"
 "journal_profiles" = "journalport/data/journal_profiles"
+"skills/journal-transfer" = "journalport/data/skills/journal-transfer"
 "benchmark/guideline_extraction_results.json" = "journalport/data/benchmark/guideline_extraction_results.json"
 
 [tool.hatch.build.targets.sdist]
+exclude = [
+  "/docs/audits/REAL_WORLD_VALIDATION_MATRIX.md",
+  "/docs/audits/V1_RELEASE_CANDIDATE_READINESS.md",
+  "/examples/public-synthetic/*.docx",
+  "/examples/public-synthetic/*.json",
+  "/examples/public-synthetic/transformed/**",
+  "/examples/public-synthetic/submission-package/**",
+]
 include = [
   "/src",
   "/schemas",

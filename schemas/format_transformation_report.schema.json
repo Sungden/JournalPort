@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/format_transformation_report.schema.json",
+  "title": "JournalPort M12 format transformation report",
+  "type": "object",
+  "required": [
+    "schema_version", "source_journal", "target_journal", "profile_version",
+    "source_hash", "candidate_hash", "operations", "artifacts", "preservation_checks",
+    "remaining_target_requirements", "transformation_verification_status",
+    "unexpected_changes", "failure_reasons"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "source_journal": {"type": ["string", "null"]},
+    "target_journal": {"type": "string"},
+    "profile_version": {"type": "string"},
+    "source_hash": {"type": "string"},
+    "candidate_hash": {"type": "string"},
+    "operations": {"type": "array", "items": {"type": "object"}},
+    "artifacts": {"type": "array", "items": {"type": "object"}},
+    "preservation_checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "remaining_target_requirements": {"type": "array", "items": {"type": "string"}},
+    "transformation_verification_status": {"enum": ["VERIFIED_CANDIDATE", "VERIFICATION_FAILED"]},
+    "unexpected_changes": {"type": "array", "items": {"type": "string"}},
+    "failure_reasons": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

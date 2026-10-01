@@ -689,9 +689,7 @@ def parse_docx(
 
                 if in_references and value:
                     manuscript.references.append(
-                        Reference(
-                            ids.make("reference", f"word/document.xml:p:{index}", value), value, loc
-                        )
+                        Reference(ids.make("reference", "bibliographic-text", value), value, loc)
                     )
                 elif value and not (
                     re.match(r"^(figure|fig\.)\s*\d+", value, re.IGNORECASE)
@@ -801,4 +799,42 @@ def parse_docx(
                 content = "\n".join(item.text for item in section.paragraphs).strip()
                 if content:
                     manuscript.statements[key] = content
+        from .numeric_citations import expand_numeric_marker
+
+        reference_numbers: dict[int, list[str]] = {}
+        reference_texts = {reference.raw_text for reference in manuscript.references}
+        for reference in manuscript.references:
+            match = re.match(r"^\s*(\d+)\s*[.)]\s+", reference.raw_text)
+            if match:
+                reference_numbers.setdefault(int(match[1]), []).append(reference.object_id)
+        for index, element, value, _ in paragraphs:
+            if (
+                value in reference_texts
+                or list(element.iter(W + "instrText"))
+                or list(element.iter(W + "fldSimple"))
+            ):
+                continue
+            for marker in re.findall(r"\[\d+(?:\s*(?:,|–|-)\s*\d+)*\]", value):
+                try:
+                    numbers = expand_numeric_marker(marker)
+                except ValueError:
+                    numbers = ()
+                reliable = bool(numbers) and all(
+                    len(reference_numbers.get(number, [])) == 1 for number in numbers
+                )
+                locator = _locator(source_path.name, "word/document.xml", index)
+                if not reliable:
+                    locator.status = "PARTIAL"
+                manuscript.citations.append(
+                    Citation(
+                        ids.make("citation", f"word/document.xml:p:{index}:numeric", marker),
+                        [
+                            reference_numbers[number][0]
+                            for number in numbers
+                            if len(reference_numbers.get(number, [])) == 1
+                        ],
+                        marker,
+                        locator,
+                    )
+                )
         return manuscript

@@ -50,6 +50,31 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="journalport")
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     commands = parser.add_subparsers(dest="command", required=True)
+    full = commands.add_parser(
+        "full-format", help="profile-driven DOCX structure, layout and verification"
+    )
+    full.add_argument("manuscript", type=Path)
+    full.add_argument("--journal", required=True)
+    full.add_argument("--article-type", default="article")
+    full.add_argument(
+        "--stage",
+        choices=("INITIAL_SUBMISSION", "REVISION", "FINAL_SUBMISSION", "ACCEPTED"),
+        required=True,
+    )
+    full.add_argument("--profile-version", default="1.3.2")
+    full.add_argument("--profiles", type=Path, default=_default_profiles_path())
+    full.add_argument("--output", type=Path, required=True)
+    full.add_argument("--plan-only", action="store_true")
+    full.add_argument("--reviewed-plan", type=Path)
+    full.add_argument("--render-executable")
+    full.add_argument("--supplement", type=Path, action="append", default=[])
+    full.add_argument(
+        "--confirm-condition",
+        metavar="RULE_ID",
+        action="append",
+        default=[],
+        help="author-confirmed applicability of a verified conditional ordering rule; repeatable",
+    )
     audit = commands.add_parser("audit", help="read-only deterministic compliance audit")
     audit.add_argument("manuscript", type=Path)
     audit.add_argument("--journal", required=True)
@@ -140,6 +165,30 @@ def _default_profiles_path() -> Path:
     return checkout if checkout.is_dir() else bundled
 
 
+def _resolve_profile_version(
+    profiles: Path, slug: str, article_type: str, version: str
+) -> ResolvedJournalProfile:
+    """Resolve the requested article profile through its immutable pinned parents."""
+    registry = ProfileRegistry.from_directory(profiles)
+    publisher = "publisher:nature-portfolio"
+    journal = f"journal:{slug}"
+    article = f"article-type:{slug}/{article_type}"
+    article_profile = registry.get(article, version)
+    journal_refs = [item for item in article_profile.parents if item.profile_id == journal]
+    if len(journal_refs) != 1:
+        raise ValueError("article profile must pin exactly one requested journal parent")
+    journal_profile = registry.get(journal, journal_refs[0].profile_version)
+    publisher_refs = [item for item in journal_profile.parents if item.profile_id == publisher]
+    if len(publisher_refs) != 1:
+        raise ValueError("journal profile must pin exactly one Nature Portfolio parent")
+    pins = {
+        publisher: publisher_refs[0].profile_version,
+        journal: journal_refs[0].profile_version,
+        article: version,
+    }
+    return resolve_profile(registry, publisher, journal, article, pins)
+
+
 def _audit(args: argparse.Namespace) -> int:
     manuscript_path: Path = args.manuscript
     if manuscript_path.suffix.lower() == ".docx":
@@ -149,18 +198,8 @@ def _audit(args: argparse.Namespace) -> int:
     else:
         raise SystemExit("audit supports .docx and .tex inputs")
     slug = str(args.journal)
-    publisher = "publisher:nature-portfolio"
-    journal = f"journal:{slug}"
-    article = f"article-type:{slug}/{args.article_type}"
     version = str(args.profile_version)
-    registry = ProfileRegistry.from_directory(args.profiles)
-    profile = resolve_profile(
-        registry,
-        publisher,
-        journal,
-        article,
-        {publisher: version, journal: version, article: version},
-    )
+    profile = _resolve_profile_version(args.profiles, slug, str(args.article_type), version)
     report = audit_manuscript(manuscript, profile)
     output: Path = args.output
     output.mkdir(parents=True, exist_ok=True)
@@ -187,14 +226,8 @@ def _parse_manuscript(path: Path) -> CanonicalManuscript:
 def _plan(args: argparse.Namespace) -> int:
     manuscript = _parse_manuscript(args.manuscript)
     slug = str(args.journal)
-    ids = (
-        "publisher:nature-portfolio",
-        f"journal:{slug}",
-        f"article-type:{slug}/{args.article_type}",
-    )
     version = str(args.profile_version)
-    registry = ProfileRegistry.from_directory(args.profiles)
-    profile = resolve_profile(registry, *ids, {item: version for item in ids})
+    profile = _resolve_profile_version(args.profiles, slug, str(args.article_type), version)
     report = audit_manuscript(manuscript, profile)
     plan = create_plan(manuscript, profile, report, args.manuscript)
     output: Path = args.output
@@ -216,9 +249,9 @@ def _apply(args: argparse.Namespace) -> int:
     manuscript = _parse_manuscript(source)
     article = plan.profile_id
     slug = article.removeprefix("article-type:").rsplit("/", 1)[0]
-    ids = ("publisher:nature-portfolio", f"journal:{slug}", article)
-    registry = ProfileRegistry.from_directory(args.profiles)
-    profile = resolve_profile(registry, *ids, {item: plan.profile_version for item in ids})
+    profile = _resolve_profile_version(
+        args.profiles, slug, article.rsplit("/", 1)[1], plan.profile_version
+    )
     approvals = tuple(
         Approval(**json.loads(path.read_text(encoding="utf-8"))) for path in args.approval
     )
@@ -300,9 +333,9 @@ def _verify(args: argparse.Namespace) -> int:
     original = _parse_manuscript(args.source)
     article = plan.profile_id
     slug = article.removeprefix("article-type:").rsplit("/", 1)[0]
-    ids = ("publisher:nature-portfolio", f"journal:{slug}", article)
-    registry = ProfileRegistry.from_directory(args.profiles)
-    profile = resolve_profile(registry, *ids, {item: plan.profile_version for item in ids})
+    profile = _resolve_profile_version(
+        args.profiles, slug, article.rsplit("/", 1)[1], plan.profile_version
+    )
     report, after, delta = verify_candidate(
         source_path=args.source,
         candidate_path=args.candidate,
@@ -331,13 +364,7 @@ def _verify(args: argparse.Namespace) -> int:
 def _resolve_cli_profile(
     profiles: Path, slug: str, article_type: str, version: str
 ) -> ResolvedJournalProfile:
-    ids = (
-        "publisher:nature-portfolio",
-        f"journal:{slug}",
-        f"article-type:{slug}/{article_type}",
-    )
-    registry = ProfileRegistry.from_directory(profiles)
-    return resolve_profile(registry, *ids, {item: version for item in ids})
+    return _resolve_profile_version(profiles, slug, article_type, version)
 
 
 def _package_plan(args: argparse.Namespace) -> int:
@@ -450,6 +477,28 @@ def _profile_refresh(args: argparse.Namespace, *, snapshot: Path | None = None) 
 
 
 def _dispatch(args: argparse.Namespace) -> int:
+    if args.command == "full-format":
+        from journalport.transform.full_format import run_full_format
+
+        profile = _resolve_cli_profile(
+            args.profiles, args.journal, args.article_type, args.profile_version
+        )
+        result = run_full_format(
+            args.manuscript,
+            args.output,
+            ProfileRegistry.from_directory(args.profiles),
+            profile,
+            journal=args.journal,
+            article_type=args.article_type,
+            stage=args.stage,
+            plan_only=args.plan_only,
+            approved_plan=args.reviewed_plan,
+            render_executable=args.render_executable,
+            supplements=tuple(args.supplement),
+            conditional_applicability=dict.fromkeys(args.confirm_condition, True),
+        )
+        print(json.dumps(result, indent=2))
+        return 0 if result["status"] in {"PLAN_READY", "VERIFIED_CANDIDATE"} else 2
     if args.command == "audit":
         return _audit(args)
     if args.command == "plan":

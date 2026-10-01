@@ -36,6 +36,9 @@ def test_public_api_exists_and_core_does_not_import_skills() -> None:
     assert set(api.__all__) == {
         "apply",
         "audit",
+        "format_apply",
+        "format_plan",
+        "format_verify",
         "package_build",
         "package_plan",
         "package_verify",

@@ -1,5 +1,12 @@
 # Contributing journal profiles
 
+## Submission-stage semantics
+
+Use only `INITIAL_SUBMISSION`, `REVISION`, `FINAL_SUBMISSION`, or `ACCEPTED`. A rule or
+transformation target with `submission_stages` applies only in those stages. Omission preserves
+legacy all-stage behavior; new production targets should declare stages explicitly. Stage scope
+never upgrades `PARTIAL`, `UNKNOWN`, `STALE`, or `CONFLICTED` evidence to `VERIFIED`.
+
 1. Use official journal/publisher sources and record owner, URL, retrieval time, locator, hash, and
    minimal evidence excerpt. Do not redistribute full pages without permission.
 2. Add or update the pinned publisher → journal → article-type profile chain. Use a new semantic

@@ -64,6 +64,12 @@ class ProfileRule:
     applicability_mode: str = "UNKNOWN"
     critical_for_readiness: bool = False
     evaluation_scope: str = "UNSPECIFIED"
+    submission_stages: tuple[str, ...] = (
+        "INITIAL_SUBMISSION",
+        "REVISION",
+        "FINAL_SUBMISSION",
+        "ACCEPTED",
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -92,6 +98,7 @@ class Profile:
     last_verified_at: str
     freshness_window_days: int
     status: str
+    transformation_targets: tuple[dict[str, Any], ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -167,11 +174,23 @@ def profile_from_dict(value: dict[str, Any]) -> Profile:
         evidence=tuple(EvidenceRecord(**item) for item in value["evidence"]),
         rules=tuple(
             ProfileRule(
-                **(item | {"provenance": tuple(ProvenanceRef(**ref) for ref in item["provenance"])})
+                **(
+                    item
+                    | {
+                        "provenance": tuple(ProvenanceRef(**ref) for ref in item["provenance"]),
+                        "submission_stages": tuple(
+                            item.get(
+                                "submission_stages",
+                                ("INITIAL_SUBMISSION", "REVISION", "FINAL_SUBMISSION", "ACCEPTED"),
+                            )
+                        ),
+                    }
+                )
             )
             for item in value["rules"]
         ),
         last_verified_at=value["last_verified_at"],
         freshness_window_days=value["freshness_window_days"],
         status=value["status"],
+        transformation_targets=tuple(value.get("transformation_targets", [])),
     )

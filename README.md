@@ -1,93 +1,75 @@
 # JournalPort
 
-Repository: [github.com/Sungden/JournalPort](https://github.com/Sungden/JournalPort)
+JournalPort is an installable, agent-compatible journal-transfer system backed by a deterministic,
+provenance-aware transformation and verification engine. It audits DOCX and supported LaTeX inputs,
+plans narrowly scoped changes, binds author approvals, verifies candidates independently, and builds
+local submission packages.
 
-**A provenance-aware, verifiable, content-preserving infrastructure for journal transfer and
-submission compliance.**
-
-JournalPort is an early-stage, local-first Python project. It turns pinned journal guidance into
-schema-backed profiles, audits DOCX/LaTeX manuscripts, plans narrowly supported transformations,
-independently verifies candidates, and builds submission packages. Four reusable Agent Skills
-orchestrate these tested capabilities while keeping semantic edits and uncertain requirements
-human-in-the-loop. It does not submit manuscripts and is not affiliated with any journal.
-
-It exists because journal requirements are fragmented and ambiguous. JournalPort keeps rules tied
-to evidence, uses deterministic checks where possible, and prevents a transformer from declaring
-its own work correct.
+It is not a generic Word formatter, an autonomous scientific writer, a submission-portal bot, or a
+guarantee of editorial acceptance.
 
 ```text
-Official Guidelines → Journal Profiles → Manuscript Parsing → Compliance Audit
-       → Safe Transformation Plan → Independent Verification → Submission Package
-                 Agent Skills orchestrate the public CLI/API above this flow
+Agent Skill → JournalPort Core → deterministic transformation → independent verification
 ```
 
-## Quickstart
+## Install and start
 
-Requires Python 3.11 or newer.
+Python 3.11 or newer is required:
 
-Install the public release candidate directly from its verified GitHub release asset:
+From a source checkout, install with `python -m pip install -e .`.
+For Nature Communications Article DOCX formatting, see [the full-format guide](docs/NC_DOCX_FORMAT.md).
+Pin profile `1.3.2`; select the submission stage explicitly. LibreOffice is a separate local prerequisite
+for rendering. This is a conservative release candidate, not universal one-click journal compliance.
 
 ```bash
-python -m pip install https://github.com/Sungden/JournalPort/releases/download/v0.1.0rc1/journalport-0.1.0rc1-py3-none-any.whl
+python -m pip install journalport-1.0.0rc1-py3-none-any.whl
 journalport --version
-journalport --help
+journalport audit --help
+journalport audit manuscript.docx --journal nature-communications \
+  --article-type article --profile-version 1.2.0 --output private/audit
 ```
 
-Expected version output is `journalport 0.1.0rc1`. JournalPort is not yet published on PyPI, so
-`pip install journalport` is not currently supported.
-
-For the complete source checkout, bundled examples, and Agent Skills:
-
-```bash
-git clone https://github.com/Sungden/JournalPort.git
-cd JournalPort
-python -m pip install -e .
-journalport audit examples/quickstart/article.tex \
-  --journal nature-communications --output audit-result
-```
-
-Inspect `audit-result/compliance_report.json`. The public rc1 GitHub Actions matrix passes on Python
-3.11, 3.12, and 3.13. The deterministic CLI/core and bundled profiles are included in the wheel;
-the four Agent Skills are distributed in the source repository and source archive, not the wheel.
-
-See [Agent Skills](docs/SKILLS.md), [architecture](ARCHITECTURE.md), and the reproducible
-[examples](examples/skills). The deterministic core works without a model provider; the empty
-`agent` extra reserves a compatibility surface without adding an SDK dependency.
+See the [Quickstart](docs/QUICKSTART.md), [private-manuscript guide](docs/security/PRIVATE_MANUSCRIPT_GUIDE.md),
+and [single public synthetic example](examples/public-synthetic).
 
 ## Trust model
 
-- Rules retain official-source provenance and unknowns fail closed.
-- The compliance core is offline and deterministic.
-- Automatic actions are restricted to supported content-preserving operations.
-- Candidate and package verification are independent of their builders.
-- Semantic changes, profile verification, and missing author information require people.
+- Rules retain official-source provenance; uncertain rules fail closed.
+- Rules and transformation targets can be submission-stage aware.
+- Semantic edits require explicit author approval.
+- Verification is independent of transformation execution.
+- Private runtime paths are excluded from distributions.
 
-These are tested engineering properties, not a guarantee of acceptance or complete journal
-compliance.
+An implemented operation is not executable for every journal. It also requires a VERIFIED target,
+an applicable stage, support for the exact target, and safe input preconditions.
 
-## Current profile coverage
+## Production profile coverage
 
-| Journal | Article type | Profile status | Last verified |
-|---|---|---|---|
-| Nature Communications | Article | PARTIAL | 2026-09-29 |
-| Nature Computational Science | Article | PARTIAL | 2026-09-29 |
-| Nature Machine Intelligence | Article | PARTIAL | 2026-09-29 |
+| Journal | Article type | Profile | Status | Stage aware | Automation |
+|---|---|---:|---|---|---|
+| Nature Communications | Article | 1.3.2 | PARTIAL | Yes | Verified formatting targets; conditional ordering |
+| Nature Computational Science | Article | 1.1.0 | PARTIAL | Legacy | Conservative/manual |
+| Nature Machine Intelligence | Article | 1.1.0 | PARTIAL | Legacy | Conservative/manual |
 
-## Benchmarks
+`PARTIAL` does not mean complete journal compliance. Automation expands only with official evidence.
 
-On the M7 three-journal curated extraction benchmark: precision **100%**, recall **90.48%**, and
-hallucinated-requirement rate **0%**. These numbers describe only that fixed benchmark and do not
-generalize to all journals or live-provider behavior. See the
-[M7 benchmark audit](docs/audits/M7_AUDIT.md).
+## Supported boundary
 
-## Development and citation
+Core supports DOCX parsing, supported-subset LaTeX audit parsing, audit/planning, approval binding,
+provenance, independent verification, package building, and package verification. M10 implements
+`REPLACE_ABSTRACT`, `INSERT_REQUIRED_SECTION`, `NORMALIZE_SECTION_HEADING`, and
+`SET_MANUSCRIPT_METADATA`. M12 implements `REORDER_ADMIN_SECTIONS`, `TITLE_PAGE_RESTRUCTURE`,
+`FIGURE_CAPTION_NORMALIZATION`, and `EXTRACT_FIGURES_TO_SEPARATE_FILES`, subject to the gates above.
 
-Install with `python -m pip install -e ".[dev]"`, then run `pytest`, `ruff check .`,
-`ruff format --check .`, and `mypy`. Citation metadata is in [CITATION.cff](CITATION.cff); no DOI
-exists yet. Apache-2.0 covers original code and documentation; third-party journal material may
-have separate terms; see [third-party notices](THIRD_PARTY_NOTICES.md).
+Unsupported behavior includes generating missing scientific captions, deleting apparently uncited
+references, arbitrary scientific-section changes, unrestricted rewriting/shortening, unsafe reference
+conversion, equation/number/pixel edits, arbitrary table edits, full LaTeX transformation, submission
+site automation, and peer-review-response automation. See [capabilities](docs/CAPABILITY_MATRIX.md).
 
-The current public release is
-[JournalPort 0.1.0rc1](https://github.com/Sungden/JournalPort/releases/tag/v0.1.0rc1). Historical
-engineering and release evidence is retained under [`docs/audits/`](docs/audits/).
+## Agent Skill
 
+The wheel bundles `journal-transfer` under `journalport/data/skills/journal-transfer`. Copy that
+directory to the configured personal Codex skills directory. It requires Core `>=1.0.0rc1,<2`.
+Codex is tested; second-host validation is pending.
+
+JournalPort is Apache-2.0 licensed and is not affiliated with any journal or publisher.

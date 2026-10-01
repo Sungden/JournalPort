@@ -6,6 +6,40 @@ All notable changes will follow Keep a Changelog and semantic versioning.
 
 ### Added
 
+- Add pinned Nature Communications Article 1.3.0 document targets, inherited Nature Portfolio
+  declaration targets, stage-aware full-format planning, structural/layout DOCX operations,
+  numeric citation linkage, explicit supplementary artifacts, render diagnostics and coverage reports.
+- Add five public synthetic NC corpus generators and installed DOCX workflow validation.
+- Report NC_DOCX_NOT_CLOSED while reference rendering, uncertain profile details and rendering
+  validation remain unresolved; packages retain manual-review status.
+
+### Fixed
+
+- Preserve extraction-only DOCX candidates byte-for-byte and preserve namespace prefixes in
+  full-format structural execution; keep new ZIP artifact timestamps deterministic.
+- Bind packaging to verified candidate/artifact hashes and reject unsafe artifact paths.
+
+## [1.0.0rc1] - 2026-09-30
+
+### Added
+
+- Freeze the v1 deterministic Core, M10/M12 transformation boundary, operation-aware verification,
+  stage-aware journal profiles, portable journal-transfer Skill, and release documentation.
+- Add Nature Communications Article profile 1.2.0 with conservative REVISION-stage targets.
+
+### Fixed
+
+- Resolve article profiles through their immutable parent-version pins so mixed parent versions work
+  from an installed CLI.
+- Fail closed when a VERIFIED formatting target exceeds the executor's actual target semantics.
+
+### Security
+
+- Exclude real manuscripts, sessions, approval payloads, disclosure ledgers, and private runtime
+  outputs from distribution artifacts.
+
+### Added
+
 - Add the M11 Codex-native transfer skill, resumable local transfer sessions, proposal and disclosure
   contracts, deterministic scientific-token diff safeguards, privacy minimization, and focused
   abstract/declaration/cover-letter/verification/package workflows.
@@ -37,7 +71,7 @@ All notable changes will follow Keep a Changelog and semantic versioning.
 
 - Evaluate target article type from resolved submission context and cover-letter presence at the
   package artifact layer instead of requiring visible manuscript metadata.
-- Prepare package version `0.1.0rc3`; no tag or release has been created.
+- Historical development state prepared package version `0.1.0rc3` without a tag or release.
 
 ## [0.1.0rc1] - 2026-09-29
 

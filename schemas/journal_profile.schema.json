@@ -22,6 +22,16 @@
       "locator": {"type": "string", "minLength": 1}, "evidence_text": {"type": "string", "minLength": 1, "maxLength": 500}, "evidence_hash": {"$ref": "#/$defs/sha256"}
     }},
     "provenanceRef": {"type": "object", "additionalProperties": false, "required": ["source_id", "evidence_id"], "properties": {"source_id": {"type": "string", "pattern": "^src:[a-z0-9][a-z0-9.-]+$"}, "evidence_id": {"type": "string", "pattern": "^ev:[a-z0-9][a-z0-9.-]+$"}}},
+    "submissionStage": {"enum": ["INITIAL_SUBMISSION", "REVISION", "FINAL_SUBMISSION", "ACCEPTED"]},
+    "transformationTarget": {"type": "object", "additionalProperties": false, "required": ["rule_id", "target_state", "status", "provenance", "source", "retrieved_at", "confidence"], "properties": {
+      "rule_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]{2,127}$"}, "target_state": {},
+      "status": {"enum": ["VERIFIED", "PARTIAL", "UNKNOWN", "CONFLICTED", "STALE", "NOT_APPLICABLE"]},
+      "provenance": {"type": "array", "items": {"$ref": "#/$defs/provenanceRef"}, "uniqueItems": true},
+      "source": {"type": "string", "pattern": "^src:[a-z0-9][a-z0-9.-]+$"},
+      "retrieved_at": {"type": "string", "format": "date-time"},
+      "confidence": {"enum": ["HIGH", "MEDIUM", "LOW", "UNKNOWN"]},
+      "submission_stages": {"type": "array", "items": {"$ref": "#/$defs/submissionStage"}, "minItems": 1, "uniqueItems": true}
+    }},
     "rule": {"type": "object", "additionalProperties": false, "required": ["rule_id", "rule_version", "category", "target", "operator", "value", "unit", "severity", "applicability", "machine_checkable", "autofix_class", "provenance", "confidence", "status", "override_of", "override_reason"], "properties": {
       "rule_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]{2,127}$"}, "rule_version": {"$ref": "#/$defs/semver"},
       "category": {"enum": ["IDENTITY", "LIMIT", "SECTION", "STATEMENT", "REFERENCE", "FIGURE", "TABLE", "FILE", "FORMATTING", "POLICY", "OTHER"]},
@@ -31,7 +41,7 @@
       "provenance": {"type": "array", "items": {"$ref": "#/$defs/provenanceRef"}, "uniqueItems": true},
       "confidence": {"enum": ["HIGH", "MEDIUM", "LOW", "UNKNOWN"]}, "status": {"enum": ["VERIFIED", "PARTIAL", "UNKNOWN", "CONFLICTED", "STALE", "NOT_APPLICABLE"]},
       "override_of": {"type": ["string", "null"]}, "override_reason": {"type": ["string", "null"]}
-      ,"applicability_mode": {"enum": ["ALWAYS", "CONDITIONAL", "NOT_APPLICABLE", "UNKNOWN"]}, "critical_for_readiness": {"type": "boolean"}, "evaluation_scope": {"type": "string", "minLength": 1}
+      ,"applicability_mode": {"enum": ["ALWAYS", "CONDITIONAL", "NOT_APPLICABLE", "UNKNOWN"]}, "critical_for_readiness": {"type": "boolean"}, "evaluation_scope": {"type": "string", "minLength": 1}, "submission_stages": {"type": "array", "items": {"$ref": "#/$defs/submissionStage"}, "minItems": 1, "uniqueItems": true}
     }}
   },
   "allOf": [{"if": {"properties": {"schema_version": {"const": "2.1.0"}}}, "then": {"properties": {"rules": {"items": {"required": ["applicability_mode", "critical_for_readiness", "evaluation_scope"]}}}}}],
@@ -42,6 +52,7 @@
     "journal": {"oneOf": [{"type": "null"}, {"type": "object", "additionalProperties": false, "required": ["name", "publisher", "issn", "journal_url"], "properties": {"name": {"type": "string"}, "publisher": {"type": "string"}, "issn": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}, "journal_url": {"type": "string", "format": "uri", "pattern": "^https://"}}}]},
     "article_type": {"type": ["string", "null"]}, "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}, "uniqueItems": true},
     "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}, "uniqueItems": true}, "rules": {"type": "array", "items": {"$ref": "#/$defs/rule"}},
+    "transformation_targets": {"type": "array", "items": {"$ref": "#/$defs/transformationTarget"}},
     "last_verified_at": {"type": "string", "format": "date-time"}, "freshness_window_days": {"type": "integer", "minimum": 1, "maximum": 3650},
     "status": {"enum": ["VERIFIED", "PARTIAL", "UNKNOWN", "CONFLICTED", "STALE"]}
   }

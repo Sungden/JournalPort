@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "profile_id": "article-type:nature-communications/article",
+  "from_version": "1.1.0",
+  "to_version": "1.2.0",
+  "retrieved_at": "2026-09-30T00:00:00Z",
+  "official_sources_only": true,
+  "submission_stage_model": ["INITIAL_SUBMISSION", "REVISION", "FINAL_SUBMISSION", "ACCEPTED"],
+  "changes": [
+    {"rule_id": "abstract.max_words", "before": {"value": 200, "status": "VERIFIED", "stages": "ALL"}, "after": {"value": 150, "status": "PARTIAL", "stages": ["REVISION", "FINAL_SUBMISSION"]}, "classification": "STAGE_CONDITIONAL", "reason": "Initial formatting is flexible; the official numeric limit is in a dated 2021 PDF and is not a current universal VERIFIED hard limit."},
+    {"rule_id": "title.max_words", "before": {"value": 15, "status": "VERIFIED", "stages": "ALL"}, "after": {"value": 15, "status": "PARTIAL", "stages": ["REVISION", "FINAL_SUBMISSION"]}, "classification": "STAGE_CONDITIONAL"},
+    {"rule_id": "manuscript_structure.admin_section_order", "before": null, "after": {"status": "VERIFIED", "stages": ["REVISION", "FINAL_SUBMISSION"]}, "classification": "VERIFIED_EXECUTABLE"},
+    {"rule_id": "title_page.mode", "before": null, "after": {"value": "INLINE_TITLE_PAGE", "status": "VERIFIED", "stages": ["REVISION", "FINAL_SUBMISSION"]}, "classification": "VERIFIED_NONEXECUTABLE"},
+    {"rule_id": "figures.caption_format", "before": null, "after": {"status": "PARTIAL", "stages": ["REVISION", "FINAL_SUBMISSION"]}, "classification": "PARTIAL"},
+    {"rule_id": "figures.separate_files", "before": {"status": "PARTIAL", "stages": "ALL"}, "after": {"value": true, "status": "VERIFIED", "stages": ["REVISION", "FINAL_SUBMISSION"]}, "classification": "VERIFIED_EXECUTABLE"},
+    {"rule_id": "references.style", "before": null, "after": {"status": "UNKNOWN"}, "classification": "UNKNOWN"},
+    {"rule_id": "supplement.organization", "before": null, "after": {"status": "UNKNOWN"}, "classification": "UNKNOWN"}
+  ],
+  "operation_legality": {
+    "INITIAL_SUBMISSION": {"REORDER_ADMIN_SECTIONS": "BLOCKED_STAGE_NOT_APPLICABLE", "TITLE_PAGE_RESTRUCTURE": "BLOCKED_STAGE_NOT_APPLICABLE", "FIGURE_CAPTION_NORMALIZATION": "BLOCKED_STAGE_NOT_APPLICABLE", "EXTRACT_FIGURES_TO_SEPARATE_FILES": "BLOCKED_STAGE_NOT_APPLICABLE"},
+    "REVISION": {"REORDER_ADMIN_SECTIONS": "BLOCKED_VERIFIED_NONEXECUTABLE", "TITLE_PAGE_RESTRUCTURE": "BLOCKED_VERIFIED_NONEXECUTABLE", "FIGURE_CAPTION_NORMALIZATION": "BLOCKED_PARTIAL", "EXTRACT_FIGURES_TO_SEPARATE_FILES": "LEGAL_VERIFIED_EXECUTABLE"}
+  }
+}

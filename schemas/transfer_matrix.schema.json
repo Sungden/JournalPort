@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/transfer_matrix.schema.json",
+  "title": "JournalPort source-to-target transfer matrix",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "submission_stage", "rows"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "submission_stage": {"enum": ["INITIAL_SUBMISSION", "REVISION", "FINAL_SUBMISSION", "ACCEPTED"]},
+    "rows": {"type": "array", "items": {
+    "type": "object",
+    "required": [
+      "rule_id", "source_state", "target_state", "current_state", "action",
+      "operation", "executor_support", "risk", "approval", "status",
+      "profile_status", "confidence", "evidence"
+    ],
+    "properties": {
+      "rule_id": {"type": "string"},
+      "source_state": {},
+      "target_state": {},
+      "current_state": {},
+      "action": {"enum": ["KEEP", "MODIFY", "ADD", "REMOVE", "SPLIT", "MANUAL", "UNKNOWN"]},
+      "operation": {"type": "string"},
+      "executor_support": {"enum": ["SUPPORTED", "UNSUPPORTED", "NOT_REQUIRED"]},
+      "risk": {
+        "enum": [
+          "SAFE_FORMAT_AUTOMATIC", "CONTENT_PRESERVING_AUTOMATIC",
+          "AUTHOR_APPROVAL_REQUIRED", "AUTHOR_INPUT_REQUIRED", "MANUAL_REVIEW_REQUIRED",
+          "FORBIDDEN_AUTOMATIC", "PROFILE_UNCERTAIN"
+        ]
+      },
+      "approval": {"type": "string"},
+      "status": {"type": "string"},
+      "profile_status": {"type": "string"},
+      "confidence": {"type": "string"},
+      "evidence": {"type": "array", "items": {"type": "object"}}
+    },
+    "additionalProperties": false
+    }}
+  }
+}

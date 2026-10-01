@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.1.0",
+  "profile_id": "journal:nature-communications",
+  "display_name": "Nature Communications",
+  "profile_version": "1.2.0",
+  "source_snapshot_version": "1.2.0",
+  "profile_kind": "JOURNAL",
+  "precedence": 200,
+  "parents": [{"profile_id": "publisher:nature-portfolio", "profile_version": "1.1.0"}],
+  "journal": {"name": "Nature Communications", "publisher": "Nature Portfolio", "issn": ["2041-1723"], "journal_url": "https://www.nature.com/ncomms/"},
+  "article_type": null,
+  "sources": [],
+  "evidence": [],
+  "rules": [],
+  "last_verified_at": "2026-09-30T00:00:00Z",
+  "freshness_window_days": 180,
+  "status": "PARTIAL"
+}

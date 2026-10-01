@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1.0.0/format_coverage_report.schema.json",
+  "title": "JournalPort full format coverage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "target_rule_count", "verified_rule_count", "executable_rule_count", "applied_rule_count", "satisfied_without_change", "manual_rule_count", "unknown_rule_count", "unsupported_rule_count", "supported_target_coverage", "target_format_status", "visual_status", "full_format_verified"],
+  "properties": {
+    "formatting_target_count": {"type": "integer", "minimum": 0},
+    "resolved_formatting_target_count": {"type": "integer", "minimum": 0},
+    "formatting_target_coverage": {"type": "number", "minimum": 0, "maximum": 100},
+    "overall_profile_coverage": {"type": "number", "minimum": 0, "maximum": 100},
+    "render_status": {"enum": ["RENDER_PASS", "RENDER_PASS_WITH_WARNINGS", "RENDER_FAILED", "NOT_AVAILABLE"]},
+    "schema_version": {"const": "1.0.0"},
+    "target_rule_count": {"type": "integer", "minimum": 0},
+    "verified_rule_count": {"type": "integer", "minimum": 0},
+    "executable_rule_count": {"type": "integer", "minimum": 0},
+    "applied_rule_count": {"type": "integer", "minimum": 0},
+    "satisfied_without_change": {"type": "integer", "minimum": 0},
+    "manual_rule_count": {"type": "integer", "minimum": 0},
+    "unknown_rule_count": {"type": "integer", "minimum": 0},
+    "unsupported_rule_count": {"type": "integer", "minimum": 0},
+    "supported_target_coverage": {"type": "number", "minimum": 0, "maximum": 1},
+    "target_format_status": {"enum": ["FORMAT_TARGET_VERIFIED", "FORMAT_TARGET_PARTIAL", "FORMAT_TARGET_BLOCKED"]},
+    "visual_status": {"enum": ["VISUAL_PASS", "VISUAL_PASS_WITH_NOTES", "VISUAL_FAIL", "NOT_PERFORMED"]},
+    "full_format_verified": {"type": "boolean"},
+    "repeat_execution_byte_idempotent": {"type": "boolean"}
+  },
+  "allOf": [{"if": {"properties": {"full_format_verified": {"const": true}}}, "then": {"properties": {"target_format_status": {"const": "FORMAT_TARGET_VERIFIED"}, "render_status": {"const": "RENDER_PASS"}, "visual_status": {"enum": ["VISUAL_PASS", "VISUAL_PASS_WITH_NOTES"]}}}}]
+}

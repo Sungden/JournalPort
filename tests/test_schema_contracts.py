@@ -43,6 +43,12 @@ EXPECTED = {
     "agent_proposal.schema.json",
     "scientific_diff.schema.json",
     "disclosure_ledger.schema.json",
+    "transfer_matrix.schema.json",
+    "format_transformation_plan.schema.json",
+    "format_transformation_report.schema.json",
+    "full_format_plan.schema.json",
+    "format_coverage_report.schema.json",
+    "render_validation_report.schema.json",
 }
 
 

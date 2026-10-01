@@ -12,7 +12,7 @@ Install JournalPort with `python -m pip install .`. Copy or link the desired dir
 the skill by name and provide the inputs described in its `SKILL.md`. The deterministic wrapper in
 each `scripts/run.py` is also executable with Python; use `--help` for its stable arguments.
 
-All skills require JournalPort `>=0.1.0rc1,<0.2`; compatibility and outputs are registered in
+The distributable journal-transfer skill requires JournalPort `>=1.0.0rc1,<2`; compatibility and outputs are registered in
 `skills/registry.yaml`. They call public CLI commands and emit `skill_run.json`, whose artifact
 hashes and statuses are machine-readable. They do not contain journal-specific rules.
 

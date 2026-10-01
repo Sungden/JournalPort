@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1/format_transformation_plan.schema.json",
+  "title": "JournalPort M12 format transformation plan",
+  "type": "object",
+  "required": [
+    "schema_version", "source_mode", "source_journal", "target_journal",
+    "profile_version", "source_hash", "operations", "transfer_matrix", "execution_order",
+    "submission_stage"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "source_mode": {"enum": ["TARGET_ONLY", "SOURCE_TO_TARGET"]},
+    "source_journal": {"type": ["string", "null"]},
+    "target_journal": {"type": "string"},
+    "profile_version": {"type": "string"},
+    "source_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "operations": {"type": "array", "items": {"type": "object"}},
+    "transfer_matrix": {"type": "array", "items": {"type": "object"}},
+    "execution_order": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "submission_stage": {"enum": ["INITIAL_SUBMISSION", "REVISION", "FINAL_SUBMISSION", "ACCEPTED"]}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://journalport.org/schemas/v1.0.0/render_validation_report.schema.json",
+  "title": "JournalPort rendering QA",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "backend", "page_count", "checks", "warnings", "failure_reasons"],
+  "properties": {
+    "backend_version": {"type": ["string", "null"]},
+    "input_hash": {"type": ["string", "null"]},
+    "output_pdf_hash": {"type": ["string", "null"]},
+    "conversion_exit_code": {"type": ["integer", "null"]},
+    "schema_version": {"const": "1.0.0"},
+    "status": {"enum": ["RENDER_PASS", "RENDER_PASS_WITH_WARNINGS", "RENDER_FAILED", "NOT_AVAILABLE"]},
+    "backend": {"type": "string"},
+    "page_count": {"type": "integer", "minimum": 0},
+    "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "failure_reasons": {"type": "array", "items": {"type": "string"}}
+  }
+}
