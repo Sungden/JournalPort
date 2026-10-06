@@ -26,8 +26,15 @@
 ## Explicitly unsupported
 
 - Generating missing scientific figure captions or deleting apparently uncited references
-- Arbitrary scientific-section renaming, merging, or splitting
-- Unrestricted scientific prose rewriting or main-text shortening
+- Arbitrary scientific-section renaming, merging, or splitting (the opt-in IEEE-to-NC `restructure` recipe supports only lossless fixed section movement and heading demotion)
+- Unrestricted unverified scientific prose rewriting or main-text shortening; opt-in `nature-rewrite` generates source-bound author-review drafts with a configured model
 - Unsafe reference/citation conversion
 - Equation, scientific-number, figure-pixel, or arbitrary table-content editing
 - Full LaTeX transformation, submission-site automation, or peer-review-response automation
+
+## Nature rewrite draft route
+
+`nature-rewrite` supports configured local/remote model calls, arbitrary labelled DOCX scientific sections,
+source coverage, numeric citation checks, opaque object preservation and separate model review.
+Current validation uses synthetic model adapters, not a live LLM or a real scientific manuscript.
+See [Nature rewrite](NATURE_REWRITE.md) for explicit input, journal/type and context-length limits.

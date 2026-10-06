@@ -1,0 +1,12 @@
+{
+  "fixture": "../rewrite_synthetic.md",
+  "synthetic_only": true,
+  "live_writer": "Codex CLI, actual authenticated request",
+  "live_reviewer": "Separate Codex CLI request",
+  "final_layout_validation": "Replay of saved live responses after layout fixes",
+  "source_coverage_exactly_once": true,
+  "numeric_and_citation_checks": "PASS",
+  "semantic_model_review": "PASS",
+  "render_status": "RENDER_PASS",
+  "submission_ready": false
+}

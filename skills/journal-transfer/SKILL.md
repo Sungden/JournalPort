@@ -36,3 +36,8 @@ Read the focused workflows for [abstract revision](workflows/abstract_revision.m
 statements](workflows/administrative_statements.md), [cover letters](workflows/cover_letter.md),
 [verification](workflows/verification.md), and [packaging](workflows/packaging.md). Shared approval,
 safety, status, and privacy policies remain normative.
+
+For explicit scientific restructuring, use [the reviewed structure recipe](workflows/scientific_structure.md).
+For full model-assisted Nature prose rewriting, use [the rewrite workflow](workflows/nature_rewrite.md).
+These opt-in editorial routes do not establish verified journal compliance; rewriting produces an
+unapproved review draft. Keep the existing semantic approval gates for authoritative candidates.

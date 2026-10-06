@@ -64,7 +64,12 @@ class LibreOfficeRenderBackend:
                 self.executable = str(console)
 
     def render(
-        self, candidate: Path, output: Path, expected_headings: tuple[str, ...] = ()
+        self,
+        candidate: Path,
+        output: Path,
+        expected_headings: tuple[str, ...] = (),
+        *,
+        title_override: str | None = None,
     ) -> RenderValidationReport:
         input_hash = (
             "sha256:" + hashlib.sha256(candidate.read_bytes()).hexdigest()
@@ -93,7 +98,11 @@ class LibreOfficeRenderBackend:
                 from journalport.transform.full_docx import read_document
 
                 _, _, validated_body = read_document(candidate)
-                identity = identify_front_matter(validated_body)
+                title = (
+                    title_override
+                    if title_override is not None
+                    else identify_front_matter(validated_body).title
+                )
                 version = subprocess.run(
                     [self.executable, "--version"], capture_output=True, timeout=10, check=False
                 )
@@ -167,8 +176,7 @@ class LibreOfficeRenderBackend:
                 checks = {
                     "render_succeeded": True,
                     "page_count_positive": len(texts) > 0,
-                    "title_detectable": " ".join(identity.title.split())
-                    in " ".join(joined.split()),
+                    "title_detectable": " ".join(title.split()) in " ".join(joined.split()),
                     "media_relationships_valid": True,
                     "expected_headings_present": all(
                         label in joined for label in expected_headings

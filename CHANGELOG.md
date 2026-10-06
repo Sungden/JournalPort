@@ -6,6 +6,14 @@ All notable changes will follow Keep a Changelog and semantic versioning.
 
 ### Added
 
+- Add opt-in Nature-oriented model rewriting with DOCX/Markdown/text/LaTeX/text-PDF input,
+  source-bound coverage and numeric/citation checks, separate semantic review, bounded repair,
+  HTTP or authenticated Codex backends, draft DOCX/Markdown output and render diagnostics.
+- Add a reviewed content-preserving IEEE scientific structure migration and synthetic live-model example.
+
+
+### Added
+
 - Add pinned Nature Communications Article 1.3.0 document targets, inherited Nature Portfolio
   declaration targets, stage-aware full-format planning, structural/layout DOCX operations,
   numeric citation linkage, explicit supplementary artifacts, render diagnostics and coverage reports.

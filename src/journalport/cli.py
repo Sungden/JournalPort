@@ -75,6 +75,39 @@ def _parser() -> argparse.ArgumentParser:
         default=[],
         help="author-confirmed applicability of a verified conditional ordering rule; repeatable",
     )
+    rewrite = commands.add_parser(
+        "nature-rewrite", help="model-assisted full scientific rewrite into a Nature Article draft"
+    )
+    rewrite.add_argument("manuscript", type=Path)
+    rewrite.add_argument(
+        "--journal",
+        choices=(
+            "nature-communications",
+            "nature-computational-science",
+            "nature-machine-intelligence",
+        ),
+        required=True,
+    )
+    rewrite.add_argument("--output", type=Path, required=True)
+    rewrite.add_argument("--backend", choices=("http", "codex"), default="http")
+    rewrite.add_argument("--base-url", help="OpenAI-compatible model base URL")
+    rewrite.add_argument("--codex-executable", default="codex")
+    rewrite.add_argument("--model")
+    rewrite.add_argument("--review-model")
+    rewrite.add_argument("--max-attempts", type=int, default=3)
+    rewrite.add_argument("--render-executable")
+    rewrite.add_argument("--api-key-env", default="OPENAI_API_KEY")
+    rewrite.add_argument(
+        "--allow-remote", action="store_true", help="permit sending manuscript to this remote model"
+    )
+    structure = commands.add_parser(
+        "restructure", help="reviewed IEEE-to-NC DOCX section migration"
+    )
+    structure.add_argument("manuscript", type=Path)
+    structure.add_argument("--recipe", choices=("ieee-to-nature-communications",), required=True)
+    structure.add_argument("--output", type=Path, required=True)
+    structure.add_argument("--plan-only", action="store_true")
+    structure.add_argument("--reviewed-plan", type=Path)
     audit = commands.add_parser("audit", help="read-only deterministic compliance audit")
     audit.add_argument("manuscript", type=Path)
     audit.add_argument("--journal", required=True)
@@ -477,6 +510,51 @@ def _profile_refresh(args: argparse.Namespace, *, snapshot: Path | None = None) 
 
 
 def _dispatch(args: argparse.Namespace) -> int:
+    if args.command == "nature-rewrite":
+        from journalport.agents.nature_rewrite import compatible_model
+        from journalport.agents.rewrite_backend import codex_model
+        from journalport.agents.rewrite_workflow import rewrite_manuscript
+
+        if args.backend == "codex":
+            writer = codex_model(args.codex_executable, args.model)
+            reviewer = codex_model(args.codex_executable, args.review_model or args.model)
+            privacy = "CODEX_HOSTED"
+        else:
+            if not args.base_url or not args.model:
+                raise ValueError("HTTP backend requires --base-url and --model")
+            writer = compatible_model(
+                args.base_url,
+                args.model,
+                allow_remote=args.allow_remote,
+                api_key_env=args.api_key_env,
+            )
+            reviewer = compatible_model(
+                args.base_url,
+                args.review_model or args.model,
+                allow_remote=args.allow_remote,
+                api_key_env=args.api_key_env,
+            )
+            privacy = "REMOTE_MODEL_AUTHORIZED" if args.allow_remote else "LOCAL_MODEL"
+        result = rewrite_manuscript(
+            args.manuscript,
+            args.output,
+            journal=args.journal,
+            writer=writer,
+            reviewer=reviewer,
+            privacy_mode=privacy,
+            max_attempts=args.max_attempts,
+            render_executable=args.render_executable,
+        )
+        print(json.dumps(result, indent=2))
+        return 0
+    if args.command == "restructure":
+        from journalport.transform.scientific_structure import run_scientific_structure
+
+        result = run_scientific_structure(
+            args.manuscript, args.output, plan_only=args.plan_only, reviewed_plan=args.reviewed_plan
+        )
+        print(json.dumps(result, indent=2))
+        return 0
     if args.command == "full-format":
         from journalport.transform.full_format import run_full_format
 

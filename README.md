@@ -5,8 +5,8 @@ provenance-aware transformation and verification engine. It audits DOCX and supp
 plans narrowly scoped changes, binds author approvals, verifies candidates independently, and builds
 local submission packages.
 
-It is not a generic Word formatter, an autonomous scientific writer, a submission-portal bot, or a
-guarantee of editorial acceptance.
+It is not a generic Word formatter, a submission-portal bot, or a guarantee of editorial acceptance.
+Its optional model-assisted scientific writer produces source-bound review drafts, not autonomous final submissions.
 
 ```text
 Agent Skill → JournalPort Core → deterministic transformation → independent verification
@@ -62,7 +62,7 @@ provenance, independent verification, package building, and package verification
 `FIGURE_CAPTION_NORMALIZATION`, and `EXTRACT_FIGURES_TO_SEPARATE_FILES`, subject to the gates above.
 
 Unsupported behavior includes generating missing scientific captions, deleting apparently uncited
-references, arbitrary scientific-section changes, unrestricted rewriting/shortening, unsafe reference
+references, arbitrary scientific-section changes, unrestricted unverified rewriting/shortening, unsafe reference
 conversion, equation/number/pixel edits, arbitrary table edits, full LaTeX transformation, submission
 site automation, and peer-review-response automation. See [capabilities](docs/CAPABILITY_MATRIX.md).
 
@@ -73,3 +73,16 @@ directory to the configured personal Codex skills directory. It requires Core `>
 Codex is tested; second-host validation is pending.
 
 JournalPort is Apache-2.0 licensed and is not affiliated with any journal or publisher.
+
+## IEEE scientific structure migration
+
+Use the reviewed `restructure` command to move IEEE scientific sections into an NC-oriented
+Introduction / Results / Discussion / Methods structure, retaining Related work and Conclusion
+as subsections and preserving scientific content. See [workflow and boundaries](docs/IEEE_TO_NATURE.md).
+This opt-in recipe is separate from verified journal formatting; academic integration remains reviewed editing.
+
+## Full Nature-oriented scientific rewrite
+
+`nature-rewrite` uses an explicitly configured local or remote model to reorganize and rewrite
+DOCX, Markdown, text, self-contained LaTeX or text-based PDF scientific prose, with source mapping, protected-object checks and a separate model review.
+It produces an author-review draft, not certified submission readiness. See [setup, supported inputs and limits](docs/NATURE_REWRITE.md).
