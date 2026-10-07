@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from typing import Any
 
 
@@ -64,36 +63,3 @@ def migrate_profile(
         "manual_decisions": [item["journalport_policy_decision"] for item in changes],
     }
     return migrated, report
-
-
-def migrate_tree(root: Path, decisions_path: Path, report_path: Path) -> list[Path]:
-    decisions = json.loads(decisions_path.read_text(encoding="utf-8"))
-    written: list[Path] = []
-    reports: list[dict[str, Any]] = []
-    for source in sorted(root.rglob("*1.0.0.json")):
-        if source.name not in {"1.0.0.json", "journal-1.0.0.json", "article-1.0.0.json"}:
-            continue
-        value = json.loads(source.read_text(encoding="utf-8"))
-        migrated, report = migrate_profile(value, decisions)
-        target = source.with_name(source.name.replace("1.0.0", "1.1.0"))
-        target.write_text(
-            json.dumps(migrated, ensure_ascii=False, sort_keys=True, indent=2) + "\n",
-            encoding="utf-8",
-        )
-        written.append(target)
-        reports.append(report)
-    report_path.write_text(
-        json.dumps(
-            {
-                "schema_version": "1.0.0",
-                "migration_id": decisions["migration_id"],
-                "profiles": reports,
-            },
-            ensure_ascii=False,
-            sort_keys=True,
-            indent=2,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    return written

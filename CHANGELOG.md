@@ -4,6 +4,12 @@ All notable changes will follow Keep a Changelog and semantic versioning.
 
 ## [Unreleased]
 
+### Removed
+
+- Remove the completed M2.5 batch migration script and its unused filesystem writer.
+  Preserve the pure migration function used by reproducibility tests, semantic decisions,
+  migration report and immutable profile snapshots.
+
 ### Added
 
 - Add opt-in Nature-oriented model rewriting with DOCX/Markdown/text/LaTeX/text-PDF input,
